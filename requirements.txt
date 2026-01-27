@@ -1,0 +1,15 @@
+# FastAPI Framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+
+# Database
+sqlalchemy==2.0.25
+psycopg2-binary==2.9.9
+
+# Configuration
+python-dotenv==1.0.0
+pydantic-settings==2.1.0
+
+# Additional dependencies
+pydantic==2.5.3
+requests==2.31.0  # For health checks in Dockerrequests==2.31.0  # For health checks in Docker

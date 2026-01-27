@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # PostgreSQL データベース
+  postgres:
+    image: postgres:16-alpine
+    container_name: crux_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-crux_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-crux_password}
+      POSTGRES_DB: ${POSTGRES_DB:-crux_db}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # 初期化スクリプト（初回起動時のみ実行）
+      - ./docker/postgres/initdb.d:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-crux_user} -d ${POSTGRES_DB:-crux_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - crux_network
+
+  # FastAPI アプリケーション
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crux_api
+    restart: unless-stopped
+    environment:
+      # データベース接続設定
+      DATABASE_URL: postgresql://${POSTGRES_USER:-crux_user}:${POSTGRES_PASSWORD:-crux_password}@postgres:5432/${POSTGRES_DB:-crux_db}
+      # アプリケーション設定
+      APP_NAME: ${APP_NAME:-CRUX Backend API}
+      APP_VERSION: ${APP_VERSION:-0.1.0}
+      DEBUG: ${DEBUG:-True}
+      # API設定
+      API_V1_PREFIX: ${API_V1_PREFIX:-/api/v1}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-["http://localhost:3000", "http://localhost:8080"]}
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      # 開発時のホットリロード用（本番環境では削除推奨）
+      - ./app:/app/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - crux_network
+    command: >
+      sh -c "
+        echo 'Waiting for database...' &&
+        until pg_isready -h postgres -U ${POSTGRES_USER:-crux_user} -d ${POSTGRES_DB:-crux_db}; do
+          sleep 1
+        done &&
+        echo 'Starting FastAPI application...' &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      "
+
+networks:
+  crux_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
