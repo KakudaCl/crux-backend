@@ -3,7 +3,7 @@
 -- =====================================
 
 CREATE TABLE IF NOT EXISTS result_info (
-    result_id BIGSERIAL,
+    result_id SERIAL,
     result_name VARCHAR(10) NOT NULL,
     CONSTRAINT result_info_pkey PRIMARY KEY (result_id)
 );

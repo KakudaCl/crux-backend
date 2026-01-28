@@ -3,7 +3,7 @@
 -- =====================================
 
 CREATE TABLE IF NOT EXISTS prefecture_info (
-    prefecture_id BIGSERIAL,
+    prefecture_id SERIAL,
     prefecture_name VARCHAR(20) NOT NULL,
     CONSTRAINT prefecture_info_pkey PRIMARY KEY (prefecture_id),
     CONSTRAINT prefecture_info_prefecture_name_key UNIQUE (prefecture_name)

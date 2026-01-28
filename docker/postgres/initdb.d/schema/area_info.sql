@@ -3,8 +3,8 @@
 -- =====================================
 
 CREATE TABLE IF NOT EXISTS area_info (
-    gym_id BIGINT NOT NULL,
-    area_id BIGSERIAL,
+    area_id SERIAL,
+    gym_id INTEGER NOT NULL,
     area_name VARCHAR(10) NOT NULL,
     CONSTRAINT area_info_pkey PRIMARY KEY (area_id),
     CONSTRAINT area_info_gym_id_fkey FOREIGN KEY (gym_id)

@@ -3,9 +3,9 @@
 -- =====================================
 
 CREATE TABLE IF NOT EXISTS gym_info (
-    gym_id BIGSERIAL,
+    gym_id SERIAL,
     gym_name VARCHAR(20) NOT NULL,
-    prefecture_id BIGINT NOT NULL,
+    prefecture_id INTEGER NOT NULL,
     CONSTRAINT gym_info_pkey PRIMARY KEY (gym_id),
     CONSTRAINT gym_info_prefecture_id_fkey FOREIGN KEY (prefecture_id)
         REFERENCES prefecture_info(prefecture_id)

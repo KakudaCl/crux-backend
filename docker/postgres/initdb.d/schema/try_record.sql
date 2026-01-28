@@ -4,11 +4,11 @@
 
 CREATE TABLE IF NOT EXISTS try_record (
     try_id BIGSERIAL,
-    gym_id BIGINT NOT NULL,
-    grade_id BIGINT NOT NULL,
+    gym_id INTEGER NOT NULL,
+    grade_id INTEGER NOT NULL,
     problem_number INTEGER NOT NULL,
-    area_id BIGINT,
-    result_id BIGINT NOT NULL,
+    area_id INTEGER,
+    result_id INTEGER NOT NULL,
     try_date TIMESTAMP NOT NULL,
     day_count INTEGER,
     CONSTRAINT try_record_pkey PRIMARY KEY (try_id),
