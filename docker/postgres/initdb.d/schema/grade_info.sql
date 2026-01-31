@@ -3,20 +3,16 @@
 -- =====================================
 
 CREATE TABLE IF NOT EXISTS grade_info (
-    grade_id SERIAL,
-    gym_id INTEGER NOT NULL,
-    grade_name VARCHAR(10) NOT NULL,
-    grade_color VARCHAR(6) NOT NULL,
-    CONSTRAINT grade_info_pkey PRIMARY KEY (grade_id),
-    CONSTRAINT grade_info_gym_id_fkey FOREIGN KEY (gym_id)
-        REFERENCES gym_info(gym_id)
+    "grade_id" SERIAL PRIMARY KEY,
+    "gym_id" INTEGER NOT NULL
+        REFERENCES gym_info("gym_id")
         ON DELETE CASCADE,
-    CONSTRAINT grade_info_grade_id_key UNIQUE (grade_id),
-    CONSTRAINT grade_info_grade_name_key UNIQUE (grade_name)
+    "grade_name" VARCHAR(10) NOT NULL,
+    "grade_color" VARCHAR(6) NOT NULL
 );
 
 COMMENT ON TABLE grade_info IS 'グレード情報';
-COMMENT ON COLUMN grade_info.gym_id IS 'ジムID';
-COMMENT ON COLUMN grade_info.grade_id IS 'グレードID';
-COMMENT ON COLUMN grade_info.grade_name IS 'グレード名';
-COMMENT ON COLUMN grade_info.grade_color IS 'グレード色（カラーコード）';
+COMMENT ON COLUMN grade_info."grade_id" IS 'グレードID';
+COMMENT ON COLUMN grade_info."gym_id" IS 'ジムID';
+COMMENT ON COLUMN grade_info."grade_name" IS 'グレード名';
+COMMENT ON COLUMN grade_info."grade_color" IS 'グレード色（00FFFFのようにカラーコードを格納）';

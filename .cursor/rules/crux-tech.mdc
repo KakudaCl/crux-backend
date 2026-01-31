@@ -12,6 +12,11 @@ alwaysApply: false
 - Python
 - PostgreSQL
 
+# ドキュメントの参照について
+詳細はConfluenceを参照してください。
+MCPツール `search` で検索することで最新の情報を取得できます。
+現在テーブル定義に関する情報がConfluenceに記載されています。
+
 # コンテナについて
 - PostgreSQLとFastAPIでそれぞれDockerコンテナを立ち上げる形で実装をお願いしたいです
 
