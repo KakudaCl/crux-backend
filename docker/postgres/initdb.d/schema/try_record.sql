@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS try_record (
         REFERENCES gym_info("gym_id")
         ON DELETE CASCADE,
     "problem_number" INTEGER,
-    "area_id" INTEGER NOT NULL
+    "area_id" INTEGER
         REFERENCES area_info("area_id")
         ON DELETE CASCADE,
     "grade_id" INTEGER NOT NULL
