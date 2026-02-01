@@ -32,7 +32,7 @@ INSERT INTO grade_info (gym_id, grade_name, grade_color) VALUES
     (3, 'V5', '006400'),
     (3, 'V6', '000080'),
     (3, 'V7', 'FF8C00'),
-    (3, 'V8~', '000000'),
+    (3, 'V8~', '000000');
 
 -- トライ結果情報の初期データ
 INSERT INTO result_info (result_name) VALUES
