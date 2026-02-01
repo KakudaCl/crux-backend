@@ -17,8 +17,9 @@ CREATE TABLE IF NOT EXISTS try_record (
     "result_id" INTEGER NOT NULL
         REFERENCES result_info("result_id")
         ON DELETE CASCADE,
-    "try_date" TIMESTAMP NOT NULL,
-    "day_count" INTEGER
+    "try_date" DATE NOT NULL,
+    "day_count" INTEGER,
+    "monthly_info" VARCHAR(20)
 );
 
 COMMENT ON TABLE try_record IS 'トライ記録';
