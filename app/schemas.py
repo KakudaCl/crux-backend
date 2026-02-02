@@ -7,9 +7,15 @@ class ChallengeBase(BaseModel):
     """
     挑戦記録の基本スキーマ
     """
-    user_name: str = Field(..., min_length=1, max_length=100, description="挑戦者名")
-    grade: str = Field(..., min_length=1, max_length=20, description="課題のグレード")
-    climb_type: str = Field(default="ボルダリング", max_length=50, description="クライミングの種類")
+    user_name: str = Field(
+        ..., min_length=1, max_length=100, description="挑戦者名"
+    )
+    grade: str = Field(
+        ..., min_length=1, max_length=20, description="課題のグレード"
+    )
+    climb_type: str = Field(
+        default="ボルダリング", max_length=50, description="クライミングの種類"
+    )
     success: bool = Field(default=False, description="成功したかどうか")
     attempts: int = Field(default=1, ge=1, description="挑戦回数")
     notes: Optional[str] = Field(None, description="メモ・コメント")
@@ -67,12 +73,31 @@ class MonthlyInfo(BaseModel):
         from_attributes = True
 
 
+class HalfYearInfo(BaseModel):
+    """
+    半期情報スキーマ
+    """
+    period: str = Field(..., description="期間（上半期/下半期）")
+    top_rate: float = Field(..., description="完登率（%）")
+    boulder_count: int = Field(..., description="挑戦課題数")
+    top_count: int = Field(..., description="完登数")
+
+    class Config:
+        from_attributes = True
+
+
 class GradeTopRate(BaseModel):
     """
     グレード別完登率情報スキーマ
     """
     grade: str = Field(..., description="グレード名（例: 3級）")
     monthly_info: List[MonthlyInfo] = Field(..., description="月別情報")
+    first_half: Optional[HalfYearInfo] = Field(
+        None, description="上半期情報（1-6月）"
+    )
+    second_half: Optional[HalfYearInfo] = Field(
+        None, description="下半期情報（7-12月）"
+    )
 
     class Config:
         from_attributes = True

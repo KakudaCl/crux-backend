@@ -266,7 +266,19 @@ GET http://localhost:8000/health
           "boulder_count": 20,
           "top_count": 15
         }
-      ]
+      ],
+      "first_half": {
+        "period": "上半期",
+        "top_rate": 62.5,
+        "boulder_count": 44,
+        "top_count": 27
+      },
+      "second_half": {
+        "period": "下半期",
+        "top_rate": 55.0,
+        "boulder_count": 40,
+        "top_count": 22
+      }
     }
   ]
 }
@@ -290,6 +302,16 @@ http GET "http://localhost:8000/api/v1/top_rates" year==2026 gym_id==1
     - `top_rate`: 完登率（%、小数第2位まで）
     - `boulder_count`: 挑戦課題数
     - `top_count`: 完登数（FLASHまたはTOPの結果）
+  - `first_half`: 上半期情報（1-6月の集計、該当データがない場合はnull）
+    - `period`: "上半期"
+    - `top_rate`: 完登率（%、小数第2位まで）
+    - `boulder_count`: 挑戦課題数
+    - `top_count`: 完登数
+  - `second_half`: 下半期情報（7-12月の集計、該当データがない場合はnull）
+    - `period`: "下半期"
+    - `top_rate`: 完登率（%、小数第2位まで）
+    - `boulder_count`: 挑戦課題数
+    - `top_count`: 完登数
 
 **エラーレスポンス**:
 - `400 Bad Request`: パラメータが不正な場合

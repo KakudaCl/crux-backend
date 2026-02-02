@@ -114,6 +114,12 @@ async def get_top_rates(
             )
             monthly_info: List[schemas.MonthlyInfo] = []
 
+            # 半期ごとの集計用変数
+            first_half_total = 0
+            first_half_top = 0
+            second_half_total = 0
+            second_half_top = 0
+
             # 月でソート
             for month in sorted(grade_month_data[grade_id].keys()):
                 data = grade_month_data[grade_id][month]
@@ -137,10 +143,48 @@ async def get_top_rates(
                     )
                 )
 
+                # 半期ごとの集計
+                if 1 <= month <= 6:
+                    # 上半期（1-6月）
+                    first_half_total += boulder_count
+                    first_half_top += top_count
+                elif 7 <= month <= 12:
+                    # 下半期（7-12月）
+                    second_half_total += boulder_count
+                    second_half_top += top_count
+
+            # 上半期情報の作成
+            first_half_info = None
+            if first_half_total > 0:
+                first_half_rate = round(
+                    (first_half_top / first_half_total * 100), 2
+                )
+                first_half_info = schemas.HalfYearInfo(
+                    period="上半期",
+                    top_rate=first_half_rate,
+                    boulder_count=first_half_total,
+                    top_count=first_half_top
+                )
+
+            # 下半期情報の作成
+            second_half_info = None
+            if second_half_total > 0:
+                second_half_rate = round(
+                    (second_half_top / second_half_total * 100), 2
+                )
+                second_half_info = schemas.HalfYearInfo(
+                    period="下半期",
+                    top_rate=second_half_rate,
+                    boulder_count=second_half_total,
+                    top_count=second_half_top
+                )
+
             result_info.append(
                 schemas.GradeTopRate(
                     grade=grade_name,
-                    monthly_info=monthly_info
+                    monthly_info=monthly_info,
+                    first_half=first_half_info,
+                    second_half=second_half_info
                 )
             )
 
