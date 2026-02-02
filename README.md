@@ -236,6 +236,65 @@ GET http://localhost:8000/
 GET http://localhost:8000/health
 ```
 
+### 完登率取得API
+
+年度/ジム/グレード別の完登率情報を取得します。
+
+**エンドポイント**: `GET /api/v1/top_rates`
+
+**クエリパラメータ**:
+- `year` (integer, 必須): 年度（例: 2026）
+- `gym_id` (integer, 必須): ジムID（例: 1）
+
+**レスポンス例**:
+
+```json
+{
+  "result_info": [
+    {
+      "grade": "3級",
+      "monthly_info": [
+        {
+          "month": "1月",
+          "top_rate": 50.0,
+          "boulder_count": 24,
+          "top_count": 12
+        },
+        {
+          "month": "2月",
+          "top_rate": 75.5,
+          "boulder_count": 20,
+          "top_count": 15
+        }
+      ]
+    }
+  ]
+}
+```
+
+**使用例**:
+
+```bash
+# cURLでのリクエスト
+curl "http://localhost:8000/api/v1/top_rates?year=2026&gym_id=1"
+
+# httpieでのリクエスト（より見やすい）
+http GET "http://localhost:8000/api/v1/top_rates" year==2026 gym_id==1
+```
+
+**レスポンスフィールド**:
+- `result_info`: グレード別の完登率情報配列
+  - `grade`: グレード名（例: "3級"）
+  - `monthly_info`: 月別情報配列
+    - `month`: 月（例: "1月"）
+    - `top_rate`: 完登率（%、小数第2位まで）
+    - `boulder_count`: 挑戦課題数
+    - `top_count`: 完登数（FLASHまたはTOPの結果）
+
+**エラーレスポンス**:
+- `400 Bad Request`: パラメータが不正な場合
+- `500 Internal Server Error`: サーバー内部エラー
+
 ## 🗄 データベーススキーマ
 
 ### テーブル一覧

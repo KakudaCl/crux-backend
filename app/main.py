@@ -6,27 +6,36 @@ CRUX Backend APIのメインアプリケーション
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
+import os
 
-from app.core.config import settings
-from app.core.database import get_db, engine
-from app.models import Base
+from app.database import get_db, engine, Base
+from app.api import top_rates
+
+# 環境変数の読み込み
+APP_NAME = os.getenv("APP_NAME", "CRUX Backend API")
+APP_VERSION = os.getenv("APP_VERSION", "1.0.0")
+DEBUG = os.getenv("DEBUG", "True").lower() in ("true", "1", "yes")
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "*").split(",")
 
 # FastAPIアプリケーションの作成
 app = FastAPI(
-    title=settings.APP_NAME,
-    version=settings.APP_VERSION,
+    title=APP_NAME,
+    version=APP_VERSION,
     description="ボルダリングのトライ記録を管理するバックエンドAPI",
-    debug=settings.DEBUG
+    debug=DEBUG
 )
 
 # CORSミドルウェアの設定
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# APIルーターの登録
+app.include_router(top_rates.router, prefix="/api/v1", tags=["Top Rates"])
 
 
 @app.on_event("startup")
@@ -35,8 +44,8 @@ async def startup_event():
     アプリケーション起動時の処理
     データベース接続の確認を行う
     """
-    print(f"🚀 Starting {settings.APP_NAME} v{settings.APP_VERSION}")
-    print(f"📊 Database URL: {settings.DATABASE_URL.split('@')[-1] if '@' in settings.DATABASE_URL else 'configured'}")
+    print(f"🚀 Starting {APP_NAME} v{APP_VERSION}")
+    print(f"📊 Database connection check...")
     
     # データベース接続の確認
     try:
@@ -53,7 +62,7 @@ async def shutdown_event():
     """
     アプリケーション終了時の処理
     """
-    print(f"👋 Shutting down {settings.APP_NAME}")
+    print(f"👋 Shutting down {APP_NAME}")
     engine.dispose()
 
 
@@ -64,8 +73,8 @@ async def root():
     APIの基本情報を返す
     """
     return {
-        "name": settings.APP_NAME,
-        "version": settings.APP_VERSION,
+        "name": APP_NAME,
+        "version": APP_VERSION,
         "status": "running",
         "message": "Welcome to CRUX Backend API"
     }
@@ -87,12 +96,8 @@ async def health_check(db: Session = Depends(get_db)):
     return {
         "status": "healthy" if db_status == "connected" else "unhealthy",
         "database": db_status,
-        "version": settings.APP_VERSION
+        "version": APP_VERSION
     }
-
-
-# 将来的なAPIルーターの追加場所
-# app.include_router(api_router, prefix=settings.API_V1_PREFIX)
 
 
 if __name__ == "__main__":
@@ -102,5 +107,5 @@ if __name__ == "__main__":
         "app.main:app",
         host="0.0.0.0",
         port=8000,
-        reload=settings.DEBUG
+        reload=DEBUG
     )
