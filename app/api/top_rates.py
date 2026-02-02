@@ -114,7 +114,7 @@ async def get_top_rates(
             )
             monthly_info: List[schemas.MonthlyInfo] = []
 
-            # 半期ごとの集計用変数
+            # 半期・年間ごとの集計用変数
             first_half_total = 0
             first_half_top = 0
             second_half_total = 0
@@ -153,38 +153,54 @@ async def get_top_rates(
                     second_half_total += boulder_count
                     second_half_top += top_count
 
-            # 上半期情報の作成
-            first_half_info = None
+            # 上半期情報をmonthly_infoに追加
             if first_half_total > 0:
                 first_half_rate = round(
                     (first_half_top / first_half_total * 100), 2
                 )
-                first_half_info = schemas.HalfYearInfo(
-                    period="上半期",
-                    top_rate=first_half_rate,
-                    boulder_count=first_half_total,
-                    top_count=first_half_top
+                monthly_info.append(
+                    schemas.MonthlyInfo(
+                        month="上半期",
+                        top_rate=first_half_rate,
+                        boulder_count=first_half_total,
+                        top_count=first_half_top
+                    )
                 )
 
-            # 下半期情報の作成
-            second_half_info = None
+            # 下半期情報をmonthly_infoに追加
             if second_half_total > 0:
                 second_half_rate = round(
                     (second_half_top / second_half_total * 100), 2
                 )
-                second_half_info = schemas.HalfYearInfo(
-                    period="下半期",
-                    top_rate=second_half_rate,
-                    boulder_count=second_half_total,
-                    top_count=second_half_top
+                monthly_info.append(
+                    schemas.MonthlyInfo(
+                        month="下半期",
+                        top_rate=second_half_rate,
+                        boulder_count=second_half_total,
+                        top_count=second_half_top
+                    )
+                )
+
+            # 年間情報をmonthly_infoに追加
+            annual_total = first_half_total + second_half_total
+            annual_top = first_half_top + second_half_top
+            if annual_total > 0:
+                annual_rate = round(
+                    (annual_top / annual_total * 100), 2
+                )
+                monthly_info.append(
+                    schemas.MonthlyInfo(
+                        month="年間",
+                        top_rate=annual_rate,
+                        boulder_count=annual_total,
+                        top_count=annual_top
+                    )
                 )
 
             result_info.append(
                 schemas.GradeTopRate(
                     grade=grade_name,
-                    monthly_info=monthly_info,
-                    first_half=first_half_info,
-                    second_half=second_half_info
+                    monthly_info=monthly_info
                 )
             )
 

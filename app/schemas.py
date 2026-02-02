@@ -91,12 +91,8 @@ class GradeTopRate(BaseModel):
     グレード別完登率情報スキーマ
     """
     grade: str = Field(..., description="グレード名（例: 3級）")
-    monthly_info: List[MonthlyInfo] = Field(..., description="月別情報")
-    first_half: Optional[HalfYearInfo] = Field(
-        None, description="上半期情報（1-6月）"
-    )
-    second_half: Optional[HalfYearInfo] = Field(
-        None, description="下半期情報（7-12月）"
+    monthly_info: List[MonthlyInfo] = Field(
+        ..., description="月別情報（月、上半期、下半期、年間を含む）"
     )
 
     class Config:
