@@ -3,7 +3,7 @@ Area Info Model
 エリア情報テーブルのモデル定義
 """
 
-from sqlalchemy import Column, BigInteger, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
@@ -16,20 +16,28 @@ class AreaInfo(Base):
     
     # カラム定義
     area_id = Column(
-        BigInteger,
+        Integer,
         primary_key=True,
-        unique=True,
         autoincrement=True,
         comment="エリアID"
+    )
+    gym_id = Column(
+        Integer,
+        ForeignKey("gym_info.gym_id", ondelete="CASCADE"),
+        nullable=False,
+        comment="ジムID"
     )
     area_name = Column(
         String(10),
         nullable=False,
-        unique=True,
         comment="エリア名"
     )
     
     # リレーションシップ
+    gym = relationship(
+        "GymInfo",
+        back_populates="areas"
+    )
     try_records = relationship(
         "TryRecord",
         back_populates="area",

@@ -17,9 +17,10 @@ CREATE TABLE IF NOT EXISTS try_record (
     "result_id" INTEGER NOT NULL
         REFERENCES result_info("result_id")
         ON DELETE CASCADE,
-    "try_date" DATE NOT NULL,
+    "try_date" DATE,
     "day_count" INTEGER,
-    "monthly_info" VARCHAR(20)
+    "monthly_info" VARCHAR(20),
+    "remarks" VARCHAR(30)
 );
 
 COMMENT ON TABLE try_record IS 'トライ記録';
@@ -31,3 +32,5 @@ COMMENT ON COLUMN try_record."grade_id" IS 'グレードID';
 COMMENT ON COLUMN try_record."result_id" IS 'トライ結果ID';
 COMMENT ON COLUMN try_record."try_date" IS 'トライ日';
 COMMENT ON COLUMN try_record."day_count" IS 'トライ日数';
+COMMENT ON COLUMN try_record."monthly_info" IS 'マンスリー情報';
+COMMENT ON COLUMN try_record."remarks" IS '備考';

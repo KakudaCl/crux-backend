@@ -15,4 +15,4 @@ COMMENT ON TABLE grade_info IS 'グレード情報';
 COMMENT ON COLUMN grade_info."grade_id" IS 'グレードID';
 COMMENT ON COLUMN grade_info."gym_id" IS 'ジムID';
 COMMENT ON COLUMN grade_info."grade_name" IS 'グレード名';
-COMMENT ON COLUMN grade_info."grade_color" IS 'グレード色（00FFFFのようにカラーコードを格納）';
+COMMENT ON COLUMN grade_info."grade_color" IS 'グレード色（カラーコード）';

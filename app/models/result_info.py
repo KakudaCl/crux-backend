@@ -3,7 +3,7 @@ Result Info Model
 トライ結果情報テーブルのモデル定義
 """
 
-from sqlalchemy import Column, BigInteger, String
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
@@ -16,7 +16,7 @@ class ResultInfo(Base):
     
     # カラム定義
     result_id = Column(
-        BigInteger,
+        Integer,
         primary_key=True,
         autoincrement=True,
         comment="トライ結果ID"

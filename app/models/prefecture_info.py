@@ -3,7 +3,7 @@ Prefecture Info Model
 都道府県情報テーブルのモデル定義
 """
 
-from sqlalchemy import Column, BigInteger, String
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
@@ -16,7 +16,7 @@ class PrefectureInfo(Base):
     
     # カラム定義
     prefecture_id = Column(
-        BigInteger,
+        Integer,
         primary_key=True,
         autoincrement=True,
         comment="都道府県ID"
@@ -24,7 +24,6 @@ class PrefectureInfo(Base):
     prefecture_name = Column(
         String(20),
         nullable=False,
-        unique=True,
         comment="都道府県名"
     )
     

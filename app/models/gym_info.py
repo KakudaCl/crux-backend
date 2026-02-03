@@ -3,7 +3,7 @@ Gym Info Model
 ジム情報テーブルのモデル定義
 """
 
-from sqlalchemy import Column, BigInteger, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
@@ -16,7 +16,7 @@ class GymInfo(Base):
     
     # カラム定義
     gym_id = Column(
-        BigInteger,
+        Integer,
         primary_key=True,
         autoincrement=True,
         comment="ジムID"
@@ -27,7 +27,7 @@ class GymInfo(Base):
         comment="ジム名称"
     )
     prefecture_id = Column(
-        BigInteger,
+        Integer,
         ForeignKey("prefecture_info.prefecture_id", ondelete="CASCADE"),
         nullable=False,
         comment="都道府県ID"
@@ -37,6 +37,16 @@ class GymInfo(Base):
     prefecture = relationship(
         "PrefectureInfo",
         back_populates="gyms"
+    )
+    grades = relationship(
+        "GradeInfo",
+        back_populates="gym",
+        cascade="all, delete-orphan"
+    )
+    areas = relationship(
+        "AreaInfo",
+        back_populates="gym",
+        cascade="all, delete-orphan"
     )
     try_records = relationship(
         "TryRecord",

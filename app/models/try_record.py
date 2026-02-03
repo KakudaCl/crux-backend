@@ -3,7 +3,7 @@ Try Record Model
 トライ記録テーブルのモデル定義
 """
 
-from sqlalchemy import Column, BigInteger, Integer, DateTime, ForeignKey
+from sqlalchemy import Column, BigInteger, Integer, Date, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
@@ -22,43 +22,53 @@ class TryRecord(Base):
         comment="トライID"
     )
     gym_id = Column(
-        BigInteger,
+        Integer,
         ForeignKey("gym_info.gym_id", ondelete="CASCADE"),
         nullable=False,
         comment="ジムID"
     )
+    problem_number = Column(
+        Integer,
+        nullable=True,
+        comment="課題番号"
+    )
+    area_id = Column(
+        Integer,
+        ForeignKey("area_info.area_id", ondelete="CASCADE"),
+        nullable=True,
+        comment="エリアID"
+    )
     grade_id = Column(
-        BigInteger,
+        Integer,
         ForeignKey("grade_info.grade_id", ondelete="CASCADE"),
         nullable=False,
         comment="グレードID"
     )
-    problem_number = Column(
-        Integer,
-        nullable=False,
-        comment="課題番号"
-    )
-    area_id = Column(
-        BigInteger,
-        ForeignKey("area_info.area_id", ondelete="SET NULL"),
-        nullable=True,
-        comment="エリアID"
-    )
     result_id = Column(
-        BigInteger,
+        Integer,
         ForeignKey("result_info.result_id", ondelete="CASCADE"),
         nullable=False,
         comment="トライ結果ID"
     )
     try_date = Column(
-        DateTime,
-        nullable=False,
+        Date,
+        nullable=True,
         comment="トライ日"
     )
     day_count = Column(
         Integer,
         nullable=True,
         comment="トライ日数"
+    )
+    monthly_info = Column(
+        String(20),
+        nullable=True,
+        comment="マンスリー情報"
+    )
+    remarks = Column(
+        String(30),
+        nullable=True,
+        comment="備考"
     )
     
     # リレーションシップ
