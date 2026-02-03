@@ -245,7 +245,7 @@ GET http://localhost:8000/health
 
 年度/ジム/グレード別の完登率情報を取得します。
 
-**エンドポイント**: `GET /api/v1/top_rates`
+**エンドポイント**: `GET /top_rates`
 
 **クエリパラメータ**:
 - `year` (integer, 必須): 年度（例: 2026）
@@ -293,10 +293,10 @@ GET http://localhost:8000/health
 
 ```bash
 # cURLでのリクエスト
-curl "http://localhost:8000/api/v1/top_rates?year=2026&gym_id=1"
+curl "http://localhost:8000/top_rates?year=2026&gym_id=1"
 
 # httpieでのリクエスト（より見やすい）
-http GET "http://localhost:8000/api/v1/top_rates" year==2026 gym_id==1
+http GET "http://localhost:8000/top_rates" year==2026 gym_id==1
 ```
 
 **レスポンスフィールド**:
@@ -430,7 +430,6 @@ mypy app/
 | `APP_NAME` | アプリケーション名 | `"CRUX Backend API"` |
 | `APP_VERSION` | アプリケーションバージョン | `"0.1.0"` |
 | `DEBUG` | デバッグモード | `True` |
-| `API_V1_PREFIX` | API v1のプレフィックス | `"/api/v1"` |
 | `ALLOWED_ORIGINS` | CORS許可オリジン | `["http://localhost:3000", "http://localhost:8080"]` |
 
 ## 🧪 テスト
