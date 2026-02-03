@@ -32,10 +32,7 @@ crux-backend/
 ├── app/
 │   ├── __init__.py
 │   ├── main.py                 # FastAPIアプリケーションのエントリーポイント
-│   ├── core/
-│   │   ├── __init__.py
-│   │   ├── config.py          # 設定管理（環境変数など）
-│   │   └── database.py        # データベース接続設定
+│   ├── database.py            # データベース接続設定
 │   ├── models/                # SQLAlchemyモデル
 │   │   ├── __init__.py
 │   │   ├── try_record.py      # トライ記録モデル
@@ -44,7 +41,15 @@ crux-backend/
 │   │   ├── grade_info.py      # グレード情報モデル
 │   │   ├── result_info.py     # トライ結果情報モデル
 │   │   └── area_info.py       # エリア情報モデル
-│   └── api/                   # API実装用（将来的に使用）
+│   ├── schemas/               # Pydanticスキーマ
+│   │   ├── __init__.py
+│   │   ├── challenges.py      # 挑戦記録スキーマ
+│   │   └── top_rates.py       # 完登率スキーマ
+│   ├── routers/               # APIルーター
+│   │   ├── __init__.py
+│   │   ├── challenges.py      # 挑戦記録エンドポイント
+│   │   └── top_rates.py       # 完登率エンドポイント
+│   └── cruds/                 # CRUD操作（将来的に使用）
 │       └── __init__.py
 ├── docker/                    # Docker関連ファイル
 │   └── postgres/

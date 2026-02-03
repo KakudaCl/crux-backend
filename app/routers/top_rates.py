@@ -1,6 +1,6 @@
 """
-Top Rates API
-完登率取得APIのエンドポイント
+Top Rates Router
+完登率取得APIのルーター定義
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status, Query

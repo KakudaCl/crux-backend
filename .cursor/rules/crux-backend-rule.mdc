@@ -1,0 +1,23 @@
+---
+alwaysApply: false
+---
+
+# 概要
+以下にFastAPIを用いたバックエンド開発時のルールを記載します
+
+# フォルダ構成について
+以下のようなフォルダ構成にして欲しいです。
+schemas,routers,models,crudsフォルダ内に
+各API用のファイルを格納していく形式です。
+
+- **app/** … アプリケーション本体
+  - **__init__.py**
+  - **main.py**
+  - **schemas/**
+    - **__init__.py**
+  - **routers/**
+    - **__init__.py**  
+  - **models/**
+    - **__init__.py**
+  - **cruds/**
+    - **__init__.py**
