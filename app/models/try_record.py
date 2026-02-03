@@ -30,12 +30,14 @@ class TryRecord(Base):
     problem_number = Column(
         Integer,
         nullable=True,
+        default=None,
         comment="課題番号"
     )
     area_id = Column(
         Integer,
         ForeignKey("area_info.area_id", ondelete="CASCADE"),
         nullable=True,
+        default=None,
         comment="エリアID"
     )
     grade_id = Column(
@@ -53,21 +55,25 @@ class TryRecord(Base):
     try_date = Column(
         Date,
         nullable=True,
+        default=None,
         comment="トライ日"
     )
     day_count = Column(
         Integer,
         nullable=True,
+        default=None,
         comment="トライ日数"
     )
     monthly_info = Column(
         String(20),
         nullable=True,
+        default=None,
         comment="マンスリー情報"
     )
     remarks = Column(
         String(30),
         nullable=True,
+        default=None,
         comment="備考"
     )
     

@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS try_record (
     "gym_id" INTEGER NOT NULL
         REFERENCES gym_info("gym_id")
         ON DELETE CASCADE,
-    "problem_number" INTEGER,
-    "area_id" INTEGER
+    "problem_number" INTEGER DEFAULT NULL,
+    "area_id" INTEGER DEFAULT NULL
         REFERENCES area_info("area_id")
         ON DELETE CASCADE,
     "grade_id" INTEGER NOT NULL
@@ -17,10 +17,10 @@ CREATE TABLE IF NOT EXISTS try_record (
     "result_id" INTEGER NOT NULL
         REFERENCES result_info("result_id")
         ON DELETE CASCADE,
-    "try_date" DATE,
-    "day_count" INTEGER,
-    "monthly_info" VARCHAR(20),
-    "remarks" VARCHAR(30)
+    "try_date" DATE DEFAULT NULL,
+    "day_count" INTEGER DEFAULT NULL,
+    "monthly_info" VARCHAR(20) DEFAULT NULL,
+    "remarks" VARCHAR(30) DEFAULT NULL
 );
 
 COMMENT ON TABLE try_record IS 'トライ記録';
