@@ -14,6 +14,11 @@ from app.schemas.top_rates import (
     GradeTopRate,
     TopRateResponse
 )
+from app.schemas.area_top_rates import (
+    AreaInfo,
+    GradeAreaTopRate,
+    AreaTopRateResponse
+)
 
 __all__ = [
     # Challenges schemas
@@ -25,4 +30,8 @@ __all__ = [
     "MonthlyInfo",
     "GradeTopRate",
     "TopRateResponse",
+    # Area Top Rates schemas
+    "AreaInfo",
+    "GradeAreaTopRate",
+    "AreaTopRateResponse",
 ]
