@@ -20,19 +20,6 @@ class MonthlyInfo(BaseModel):
         from_attributes = True
 
 
-class HalfYearInfo(BaseModel):
-    """
-    半期情報スキーマ
-    """
-    period: str = Field(..., description="期間（上半期/下半期）")
-    top_rate: float = Field(..., description="完登率（%）")
-    boulder_count: int = Field(..., description="挑戦課題数")
-    top_count: int = Field(..., description="完登数")
-
-    class Config:
-        from_attributes = True
-
-
 class GradeTopRate(BaseModel):
     """
     グレード別完登率情報スキーマ

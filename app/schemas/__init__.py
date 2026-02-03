@@ -11,7 +11,6 @@ from app.schemas.challenges import (
 )
 from app.schemas.top_rates import (
     MonthlyInfo,
-    HalfYearInfo,
     GradeTopRate,
     TopRateResponse
 )
@@ -24,7 +23,6 @@ __all__ = [
     "ChallengeResponse",
     # Top Rates schemas
     "MonthlyInfo",
-    "HalfYearInfo",
     "GradeTopRate",
     "TopRateResponse",
 ]
