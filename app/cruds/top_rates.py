@@ -59,14 +59,20 @@ def get_top_rates(
         second_half_total = 0
         second_half_top = 0
 
-        for month in sorted(grade_month_data[grade_id].keys()):
-            data = grade_month_data[grade_id][month]
+        # 1-12月すべてを含める
+        for month in range(1, 13):
+            data = grade_month_data[grade_id].get(
+                month, {"total": 0, "top": 0}
+            )
             boulder_count = data["total"]
             top_count = data["top"]
-            top_rate = (
-                round((top_count / boulder_count * 100), 2)
-                if boulder_count > 0 else 0.0
-            )
+
+            # データが存在しない月はtop_rateをNoneに設定
+            if boulder_count > 0:
+                top_rate = round((top_count / boulder_count * 100), 2)
+            else:
+                top_rate = None
+
             monthly_info.append(
                 schemas.MonthlyInfo(
                     month=f"{month}月",
@@ -75,6 +81,7 @@ def get_top_rates(
                     top_count=top_count,
                 )
             )
+
             if 1 <= month <= 6:
                 first_half_total += boulder_count
                 first_half_top += top_count

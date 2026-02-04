@@ -4,7 +4,7 @@ Top Rates Schemas
 """
 
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional
 
 
 class MonthlyInfo(BaseModel):
@@ -12,7 +12,7 @@ class MonthlyInfo(BaseModel):
     月別情報スキーマ
     """
     month: str = Field(..., description="月（例: 1月）")
-    top_rate: float = Field(..., description="完登率（%）")
+    top_rate: Optional[float] = Field(..., description="完登率（%）、データがない場合はnull")
     boulder_count: int = Field(..., description="挑戦課題数")
     top_count: int = Field(..., description="完登数")
 
