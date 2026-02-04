@@ -4,17 +4,18 @@ Area Top Rates Schemas
 """
 
 from pydantic import BaseModel, Field
-from typing import List
+from typing import List, Optional
 
 
 class AreaInfo(BaseModel):
     """
     エリア別情報スキーマ
+    データがないエリアも含め、全てのエリア名を項目として返す。
     """
     area_name: str = Field(..., description="エリア名（例: 強傾斜）")
-    top_rate: float = Field(..., description="完登率（%）")
-    boulder_count: int = Field(..., description="挑戦課題数")
-    top_count: int = Field(..., description="完登数")
+    top_rate: Optional[float] = Field(None, description="完登率（%）。データがない場合はnull")
+    boulder_count: int = Field(0, description="挑戦課題数")
+    top_count: int = Field(0, description="完登数")
 
     class Config:
         from_attributes = True
