@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRX Normal 2025 - トップ率グラフ（grade別）</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 24px; background: #f8f9fa; }
+    h1 { font-size: 1.5rem; color: #333; margin-bottom: 8px; }
+    .chart-container { position: relative; width: 100%; max-width: 900px; height: 320px; margin-bottom: 48px; }
+    .chart-wrapper { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 32px; }
+    .chart-wrapper h2 { font-size: 1.1rem; color: #444; margin: 0 0 16px 0; }
+  </style>
+</head>
+<body>
+  <h1>CRX Normal 2025 — トップ率（grade別）</h1>
+  <p>横軸: month / 縦軸: top_rate。ホバーで top_rate・boulder_count・top_count を表示。</p>
+
+  <div id="charts"></div>
+
+  <script>
+    const MONTH_ORDER = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月','上半期','下半期','年間'];
+
+    const GRADE_COLORS_CRX = {
+      'V1': 'rgba(255, 255, 0, 0.9)',      // 黄色
+      'V2': 'rgba(220, 20, 60, 0.9)',       // 赤
+      'V3': 'rgba(139, 69, 19, 0.9)'        // 茶色
+    };
+
+    const raw = {"result_info":[{"grade":"V1","monthly_info":[{"month":"1月","top_rate":50.0,"boulder_count":4,"top_count":2},{"month":"4月","top_rate":100.0,"boulder_count":2,"top_count":2},{"month":"5月","top_rate":100.0,"boulder_count":1,"top_count":1},{"month":"9月","top_rate":100.0,"boulder_count":1,"top_count":1},{"month":"11月","top_rate":100.0,"boulder_count":2,"top_count":2},{"month":"12月","top_rate":100.0,"boulder_count":1,"top_count":1},{"month":"上半期","top_rate":71.43,"boulder_count":7,"top_count":5},{"month":"下半期","top_rate":100.0,"boulder_count":4,"top_count":4},{"month":"年間","top_rate":81.82,"boulder_count":11,"top_count":9}]},{"grade":"V2","monthly_info":[{"month":"1月","top_rate":50.0,"boulder_count":2,"top_count":1},{"month":"4月","top_rate":20.0,"boulder_count":5,"top_count":1},{"month":"5月","top_rate":25.0,"boulder_count":4,"top_count":1},{"month":"9月","top_rate":25.0,"boulder_count":4,"top_count":1},{"month":"11月","top_rate":66.67,"boulder_count":3,"top_count":2},{"month":"12月","top_rate":80.0,"boulder_count":5,"top_count":4},{"month":"上半期","top_rate":27.27,"boulder_count":11,"top_count":3},{"month":"下半期","top_rate":58.33,"boulder_count":12,"top_count":7},{"month":"年間","top_rate":43.48,"boulder_count":23,"top_count":10}]},{"grade":"V3","monthly_info":[{"month":"9月","top_rate":0.0,"boulder_count":1,"top_count":0},{"month":"12月","top_rate":0.0,"boulder_count":2,"top_count":0},{"month":"下半期","top_rate":0.0,"boulder_count":3,"top_count":0},{"month":"年間","top_rate":0.0,"boulder_count":3,"top_count":0}]}]};
+
+    function buildSeries(monthlyInfo) {
+      const byMonth = {};
+      (monthlyInfo || []).forEach(function (d) { byMonth[d.month] = d; });
+      return MONTH_ORDER.map(function (m) {
+        const row = byMonth[m];
+        if (!row) return null;
+        if (row.top_rate === 0 && row.boulder_count >= 1) return 0.5;
+        return row.top_rate;
+      });
+    }
+
+    function buildTooltipExtra(monthlyInfo) {
+      const byMonth = {};
+      (monthlyInfo || []).forEach(function (d) { byMonth[d.month] = d; });
+      return MONTH_ORDER.map(function (m) {
+        const row = byMonth[m];
+        return row ? { top_rate: row.top_rate, boulder_count: row.boulder_count, top_count: row.top_count } : null;
+      });
+    }
+
+    const containers = document.getElementById('charts');
+    raw.result_info.forEach(function (gradeInfo, idx) {
+      const grade = gradeInfo.grade;
+      const monthlyInfo = gradeInfo.monthly_info || [];
+      const data = buildSeries(monthlyInfo);
+      const extras = buildTooltipExtra(monthlyInfo);
+      const color = GRADE_COLORS_CRX[grade] || 'rgba(128,128,128,0.8)';
+
+      const div = document.createElement('div');
+      div.className = 'chart-wrapper';
+      div.innerHTML = '<h2>' + grade + '</h2><div class="chart-container"><canvas id="chart-crx-' + idx + '"></canvas></div>';
+      containers.appendChild(div);
+
+      const ctx = document.getElementById('chart-crx-' + idx).getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: MONTH_ORDER,
+          datasets: [{
+            label: 'top_rate',
+            data: data,
+            backgroundColor: color,
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { title: { display: true, text: 'month' } },
+            y: {
+              min: 0,
+              max: 100,
+              title: { display: true, text: 'top_rate (%)' }
+            }
+          },
+          plugins: {
+            tooltip: {
+              enabled: true,
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: function (ctx) {
+                  const i = ctx.dataIndex;
+                  const ex = i < extras.length ? extras[i] : null;
+                  const rate = ex != null ? ex.top_rate : ctx.raw;
+                  if (rate == null) return '';
+                  return 'top_rate: ' + rate + '%';
+                },
+                afterLabel: function (ctx) {
+                  const i = ctx.dataIndex;
+                  const ex = i < extras.length ? extras[i] : null;
+                  if (!ex) return '';
+                  return 'boulder_count: ' + ex.boulder_count + '\ntop_count: ' + ex.top_count;
+                }
+              }
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

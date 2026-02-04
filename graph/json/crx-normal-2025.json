@@ -1,0 +1,151 @@
+{
+    "result_info": [
+        {
+            "grade": "V1",
+            "monthly_info": [
+                {
+                    "month": "1月",
+                    "top_rate": 50.0,
+                    "boulder_count": 4,
+                    "top_count": 2
+                },
+                {
+                    "month": "4月",
+                    "top_rate": 100.0,
+                    "boulder_count": 2,
+                    "top_count": 2
+                },
+                {
+                    "month": "5月",
+                    "top_rate": 100.0,
+                    "boulder_count": 1,
+                    "top_count": 1
+                },
+                {
+                    "month": "9月",
+                    "top_rate": 100.0,
+                    "boulder_count": 1,
+                    "top_count": 1
+                },
+                {
+                    "month": "11月",
+                    "top_rate": 100.0,
+                    "boulder_count": 2,
+                    "top_count": 2
+                },
+                {
+                    "month": "12月",
+                    "top_rate": 100.0,
+                    "boulder_count": 1,
+                    "top_count": 1
+                },
+                {
+                    "month": "上半期",
+                    "top_rate": 71.43,
+                    "boulder_count": 7,
+                    "top_count": 5
+                },
+                {
+                    "month": "下半期",
+                    "top_rate": 100.0,
+                    "boulder_count": 4,
+                    "top_count": 4
+                },
+                {
+                    "month": "年間",
+                    "top_rate": 81.82,
+                    "boulder_count": 11,
+                    "top_count": 9
+                }
+            ]
+        },
+        {
+            "grade": "V2",
+            "monthly_info": [
+                {
+                    "month": "1月",
+                    "top_rate": 50.0,
+                    "boulder_count": 2,
+                    "top_count": 1
+                },
+                {
+                    "month": "4月",
+                    "top_rate": 20.0,
+                    "boulder_count": 5,
+                    "top_count": 1
+                },
+                {
+                    "month": "5月",
+                    "top_rate": 25.0,
+                    "boulder_count": 4,
+                    "top_count": 1
+                },
+                {
+                    "month": "9月",
+                    "top_rate": 25.0,
+                    "boulder_count": 4,
+                    "top_count": 1
+                },
+                {
+                    "month": "11月",
+                    "top_rate": 66.67,
+                    "boulder_count": 3,
+                    "top_count": 2
+                },
+                {
+                    "month": "12月",
+                    "top_rate": 80.0,
+                    "boulder_count": 5,
+                    "top_count": 4
+                },
+                {
+                    "month": "上半期",
+                    "top_rate": 27.27,
+                    "boulder_count": 11,
+                    "top_count": 3
+                },
+                {
+                    "month": "下半期",
+                    "top_rate": 58.33,
+                    "boulder_count": 12,
+                    "top_count": 7
+                },
+                {
+                    "month": "年間",
+                    "top_rate": 43.48,
+                    "boulder_count": 23,
+                    "top_count": 10
+                }
+            ]
+        },
+        {
+            "grade": "V3",
+            "monthly_info": [
+                {
+                    "month": "9月",
+                    "top_rate": 0.0,
+                    "boulder_count": 1,
+                    "top_count": 0
+                },
+                {
+                    "month": "12月",
+                    "top_rate": 0.0,
+                    "boulder_count": 2,
+                    "top_count": 0
+                },
+                {
+                    "month": "下半期",
+                    "top_rate": 0.0,
+                    "boulder_count": 3,
+                    "top_count": 0
+                },
+                {
+                    "month": "年間",
+                    "top_rate": 0.0,
+                    "boulder_count": 3,
+                    "top_count": 0
+                }
+            ]
+        }
+    ]
+}
