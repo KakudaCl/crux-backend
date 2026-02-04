@@ -89,42 +89,48 @@ def get_top_rates(
                 second_half_total += boulder_count
                 second_half_top += top_count
 
-        if first_half_total > 0:
-            first_half_rate = round(
-                (first_half_top / first_half_total * 100), 2
+        # 上半期・下半期・年間は必ず含める（データがなくても項目を返す）
+        first_half_rate = (
+            round((first_half_top / first_half_total * 100), 2)
+            if first_half_total > 0
+            else None
+        )
+        monthly_info.append(
+            schemas.MonthlyInfo(
+                month="上半期",
+                top_rate=first_half_rate,
+                boulder_count=first_half_total,
+                top_count=first_half_top,
             )
-            monthly_info.append(
-                schemas.MonthlyInfo(
-                    month="上半期",
-                    top_rate=first_half_rate,
-                    boulder_count=first_half_total,
-                    top_count=first_half_top,
-                )
+        )
+        second_half_rate = (
+            round((second_half_top / second_half_total * 100), 2)
+            if second_half_total > 0
+            else None
+        )
+        monthly_info.append(
+            schemas.MonthlyInfo(
+                month="下半期",
+                top_rate=second_half_rate,
+                boulder_count=second_half_total,
+                top_count=second_half_top,
             )
-        if second_half_total > 0:
-            second_half_rate = round(
-                (second_half_top / second_half_total * 100), 2
-            )
-            monthly_info.append(
-                schemas.MonthlyInfo(
-                    month="下半期",
-                    top_rate=second_half_rate,
-                    boulder_count=second_half_total,
-                    top_count=second_half_top,
-                )
-            )
+        )
         annual_total = first_half_total + second_half_total
         annual_top = first_half_top + second_half_top
-        if annual_total > 0:
-            annual_rate = round((annual_top / annual_total * 100), 2)
-            monthly_info.append(
-                schemas.MonthlyInfo(
-                    month="年間",
-                    top_rate=annual_rate,
-                    boulder_count=annual_total,
-                    top_count=annual_top,
-                )
+        annual_rate = (
+            round((annual_top / annual_total * 100), 2)
+            if annual_total > 0
+            else None
+        )
+        monthly_info.append(
+            schemas.MonthlyInfo(
+                month="年間",
+                top_rate=annual_rate,
+                boulder_count=annual_total,
+                top_count=annual_top,
             )
+        )
         result_info.append(
             schemas.GradeTopRate(grade=grade_name, monthly_info=monthly_info)
         )
