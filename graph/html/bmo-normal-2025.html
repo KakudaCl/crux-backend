@@ -1,120 +1,280 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BMO Normal 2025 - トップ率グラフ（grade別）</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <style>
-    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; margin: 24px; background: #f8f9fa; }
-    h1 { font-size: 1.5rem; color: #333; margin-bottom: 8px; }
-    .chart-container { position: relative; width: 100%; max-width: 900px; height: 320px; margin-bottom: 48px; }
-    .chart-wrapper { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 32px; }
-    .chart-wrapper h2 { font-size: 1.1rem; color: #444; margin: 0 0 16px 0; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMO Normal 2025 - Top Rate Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+        }
+        .chart-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .chart-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #555;
+            text-align: center;
+        }
+        canvas {
+            max-height: 400px;
+        }
+    </style>
 </head>
 <body>
-  <h1>BMO Normal 2025 — トップ率（grade別）</h1>
-  <p>横軸: month / 縦軸: top_rate。ホバーで top_rate・boulder_count・top_count を表示。</p>
+    <div class="container">
+        <h1>BMO Normal 2025 - Top Rate by Grade</h1>
+        
+        <div class="chart-container">
+            <div class="chart-title">入門</div>
+            <canvas id="chart-入門"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">8-6級</div>
+            <canvas id="chart-8-6級"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">5級</div>
+            <canvas id="chart-5級"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">4級</div>
+            <canvas id="chart-4級"></canvas>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-title">3級</div>
+            <canvas id="chart-3級"></canvas>
+        </div>
+    </div>
 
-  <div id="charts"></div>
-
-  <script>
-    const MONTH_ORDER = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月','上半期','下半期','年間'];
-
-    const GRADE_COLORS_BMO = {
-      '入門': 'rgba(255, 182, 193, 0.9)',   // ピンク
-      '8-6級': 'rgba(255, 165, 0, 0.9)',   // オレンジ
-      '5級': 'rgba(255, 255, 255, 0.95)',  // 白（枠見えるように）
-      '4級': 'rgba(255, 255, 0, 0.9)',     // 黄色
-      '3級': 'rgba(34, 139, 34, 0.9)',     // 緑
-      '2級': 'rgba(220, 20, 60, 0.9)'      // 赤
-    };
-
-    const raw = {"result_info":[{"grade":"入門","monthly_info":[{"month":"1月","top_rate":100.0,"boulder_count":6,"top_count":6},{"month":"2月","top_rate":100.0,"boulder_count":4,"top_count":4},{"month":"4月","top_rate":100.0,"boulder_count":10,"top_count":10},{"month":"5月","top_rate":100.0,"boulder_count":3,"top_count":3},{"month":"6月","top_rate":100.0,"boulder_count":2,"top_count":2},{"month":"9月","top_rate":100.0,"boulder_count":2,"top_count":2},{"month":"10月","top_rate":100.0,"boulder_count":2,"top_count":2},{"month":"11月","top_rate":100.0,"boulder_count":2,"top_count":2},{"month":"上半期","top_rate":100.0,"boulder_count":25,"top_count":25},{"month":"下半期","top_rate":100.0,"boulder_count":6,"top_count":6},{"month":"年間","top_rate":100.0,"boulder_count":31,"top_count":31}]},{"grade":"8-6級","monthly_info":[{"month":"1月","top_rate":100.0,"boulder_count":5,"top_count":5},{"month":"2月","top_rate":100.0,"boulder_count":5,"top_count":5},{"month":"4月","top_rate":100.0,"boulder_count":10,"top_count":10},{"month":"5月","top_rate":100.0,"boulder_count":6,"top_count":6},{"month":"6月","top_rate":100.0,"boulder_count":4,"top_count":4},{"month":"9月","top_rate":100.0,"boulder_count":5,"top_count":5},{"month":"10月","top_rate":100.0,"boulder_count":4,"top_count":4},{"month":"11月","top_rate":100.0,"boulder_count":3,"top_count":3},{"month":"上半期","top_rate":100.0,"boulder_count":30,"top_count":30},{"month":"下半期","top_rate":100.0,"boulder_count":12,"top_count":12},{"month":"年間","top_rate":100.0,"boulder_count":42,"top_count":42}]},{"grade":"5級","monthly_info":[{"month":"1月","top_rate":100.0,"boulder_count":5,"top_count":5},{"month":"2月","top_rate":100.0,"boulder_count":6,"top_count":6},{"month":"4月","top_rate":75.0,"boulder_count":12,"top_count":9},{"month":"5月","top_rate":100.0,"boulder_count":5,"top_count":5},{"month":"6月","top_rate":80.0,"boulder_count":5,"top_count":4},{"month":"9月","top_rate":100.0,"boulder_count":6,"top_count":6},{"month":"10月","top_rate":100.0,"boulder_count":6,"top_count":6},{"month":"11月","top_rate":100.0,"boulder_count":5,"top_count":5},{"month":"上半期","top_rate":87.88,"boulder_count":33,"top_count":29},{"month":"下半期","top_rate":100.0,"boulder_count":17,"top_count":17},{"month":"年間","top_rate":92.0,"boulder_count":50,"top_count":46}]},{"grade":"4級","monthly_info":[{"month":"1月","top_rate":0.0,"boulder_count":3,"top_count":0},{"month":"2月","top_rate":50.0,"boulder_count":4,"top_count":2},{"month":"4月","top_rate":60.0,"boulder_count":5,"top_count":3},{"month":"5月","top_rate":50.0,"boulder_count":4,"top_count":2},{"month":"6月","top_rate":40.0,"boulder_count":5,"top_count":2},{"month":"9月","top_rate":100.0,"boulder_count":4,"top_count":4},{"month":"10月","top_rate":80.0,"boulder_count":5,"top_count":4},{"month":"11月","top_rate":100.0,"boulder_count":3,"top_count":3},{"month":"上半期","top_rate":42.86,"boulder_count":21,"top_count":9},{"month":"下半期","top_rate":91.67,"boulder_count":12,"top_count":11},{"month":"年間","top_rate":60.61,"boulder_count":33,"top_count":20}]},{"grade":"3級","monthly_info":[{"month":"2月","top_rate":0.0,"boulder_count":2,"top_count":0},{"month":"4月","top_rate":0.0,"boulder_count":2,"top_count":0},{"month":"6月","top_rate":0.0,"boulder_count":1,"top_count":0},{"month":"9月","top_rate":50.0,"boulder_count":2,"top_count":1},{"month":"10月","top_rate":0.0,"boulder_count":3,"top_count":0},{"month":"11月","top_rate":0.0,"boulder_count":1,"top_count":0},{"month":"上半期","top_rate":0.0,"boulder_count":5,"top_count":0},{"month":"下半期","top_rate":16.67,"boulder_count":6,"top_count":1},{"month":"年間","top_rate":9.09,"boulder_count":11,"top_count":1}]}]};
-
-    function buildSeries(monthlyInfo) {
-      const byMonth = {};
-      (monthlyInfo || []).forEach(function (d) { byMonth[d.month] = d; });
-      return MONTH_ORDER.map(function (m) {
-        const row = byMonth[m];
-        if (!row) return null;
-        if (row.top_rate === 0 && row.boulder_count >= 1) return 0.5;
-        return row.top_rate;
-      });
-    }
-
-    function buildTooltipExtra(monthlyInfo) {
-      const byMonth = {};
-      (monthlyInfo || []).forEach(function (d) { byMonth[d.month] = d; });
-      return MONTH_ORDER.map(function (m) {
-        const row = byMonth[m];
-        return row ? { top_rate: row.top_rate, boulder_count: row.boulder_count, top_count: row.top_count } : null;
-      });
-    }
-
-    const containers = document.getElementById('charts');
-    raw.result_info.forEach(function (gradeInfo, idx) {
-      const grade = gradeInfo.grade;
-      const monthlyInfo = gradeInfo.monthly_info || [];
-      const data = buildSeries(monthlyInfo);
-      const extras = buildTooltipExtra(monthlyInfo);
-      const color = GRADE_COLORS_BMO[grade] || 'rgba(128,128,128,0.8)';
-
-      const div = document.createElement('div');
-      div.className = 'chart-wrapper';
-      div.innerHTML = '<h2>' + grade + '</h2><div class="chart-container"><canvas id="chart-bmo-' + idx + '"></canvas></div>';
-      containers.appendChild(div);
-
-      const ctx = document.getElementById('chart-bmo-' + idx).getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: MONTH_ORDER,
-          datasets: [{
-            label: 'top_rate',
-            data: data,
-            backgroundColor: color,
-            borderColor: grade === '5級' ? 'rgba(0,0,0,0.2)' : 'transparent',
-            borderWidth: grade === '5級' ? 1 : 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            x: { title: { display: true, text: 'month' } },
-            y: {
-              min: 0,
-              max: 100,
-              title: { display: true, text: 'top_rate (%)' }
-            }
-          },
-          plugins: {
-            tooltip: {
-              enabled: true,
-              mode: 'index',
-              intersect: false,
-              callbacks: {
-                label: function (ctx) {
-                  const i = ctx.dataIndex;
-                  const ex = i < extras.length ? extras[i] : null;
-                  const rate = ex != null ? ex.top_rate : ctx.raw;
-                  if (rate == null) return '';
-                  return 'top_rate: ' + rate + '%';
+    <script>
+        const data = {
+            "result_info": [
+                {
+                    "grade": "入門",
+                    "monthly_info": [
+                        {"month": "1月", "top_rate": 100.0, "boulder_count": 6, "top_count": 6},
+                        {"month": "2月", "top_rate": 100.0, "boulder_count": 4, "top_count": 4},
+                        {"month": "3月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "4月", "top_rate": 100.0, "boulder_count": 10, "top_count": 10},
+                        {"month": "5月", "top_rate": 100.0, "boulder_count": 3, "top_count": 3},
+                        {"month": "6月", "top_rate": 100.0, "boulder_count": 2, "top_count": 2},
+                        {"month": "7月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "8月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "9月", "top_rate": 100.0, "boulder_count": 2, "top_count": 2},
+                        {"month": "10月", "top_rate": 100.0, "boulder_count": 2, "top_count": 2},
+                        {"month": "11月", "top_rate": 100.0, "boulder_count": 2, "top_count": 2},
+                        {"month": "12月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "上半期", "top_rate": 100.0, "boulder_count": 25, "top_count": 25},
+                        {"month": "下半期", "top_rate": 100.0, "boulder_count": 6, "top_count": 6},
+                        {"month": "年間", "top_rate": 100.0, "boulder_count": 31, "top_count": 31}
+                    ]
                 },
-                afterLabel: function (ctx) {
-                  const i = ctx.dataIndex;
-                  const ex = i < extras.length ? extras[i] : null;
-                  if (!ex) return '';
-                  return 'boulder_count: ' + ex.boulder_count + '\ntop_count: ' + ex.top_count;
+                {
+                    "grade": "8-6級",
+                    "monthly_info": [
+                        {"month": "1月", "top_rate": 100.0, "boulder_count": 5, "top_count": 5},
+                        {"month": "2月", "top_rate": 100.0, "boulder_count": 5, "top_count": 5},
+                        {"month": "3月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "4月", "top_rate": 100.0, "boulder_count": 10, "top_count": 10},
+                        {"month": "5月", "top_rate": 100.0, "boulder_count": 6, "top_count": 6},
+                        {"month": "6月", "top_rate": 100.0, "boulder_count": 4, "top_count": 4},
+                        {"month": "7月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "8月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "9月", "top_rate": 100.0, "boulder_count": 5, "top_count": 5},
+                        {"month": "10月", "top_rate": 100.0, "boulder_count": 4, "top_count": 4},
+                        {"month": "11月", "top_rate": 100.0, "boulder_count": 3, "top_count": 3},
+                        {"month": "12月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "上半期", "top_rate": 100.0, "boulder_count": 30, "top_count": 30},
+                        {"month": "下半期", "top_rate": 100.0, "boulder_count": 12, "top_count": 12},
+                        {"month": "年間", "top_rate": 100.0, "boulder_count": 42, "top_count": 42}
+                    ]
+                },
+                {
+                    "grade": "5級",
+                    "monthly_info": [
+                        {"month": "1月", "top_rate": 100.0, "boulder_count": 5, "top_count": 5},
+                        {"month": "2月", "top_rate": 100.0, "boulder_count": 6, "top_count": 6},
+                        {"month": "3月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "4月", "top_rate": 75.0, "boulder_count": 12, "top_count": 9},
+                        {"month": "5月", "top_rate": 100.0, "boulder_count": 5, "top_count": 5},
+                        {"month": "6月", "top_rate": 80.0, "boulder_count": 5, "top_count": 4},
+                        {"month": "7月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "8月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "9月", "top_rate": 100.0, "boulder_count": 6, "top_count": 6},
+                        {"month": "10月", "top_rate": 100.0, "boulder_count": 6, "top_count": 6},
+                        {"month": "11月", "top_rate": 100.0, "boulder_count": 5, "top_count": 5},
+                        {"month": "12月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "上半期", "top_rate": 87.88, "boulder_count": 33, "top_count": 29},
+                        {"month": "下半期", "top_rate": 100.0, "boulder_count": 17, "top_count": 17},
+                        {"month": "年間", "top_rate": 92.0, "boulder_count": 50, "top_count": 46}
+                    ]
+                },
+                {
+                    "grade": "4級",
+                    "monthly_info": [
+                        {"month": "1月", "top_rate": 0.0, "boulder_count": 3, "top_count": 0},
+                        {"month": "2月", "top_rate": 50.0, "boulder_count": 4, "top_count": 2},
+                        {"month": "3月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "4月", "top_rate": 60.0, "boulder_count": 5, "top_count": 3},
+                        {"month": "5月", "top_rate": 50.0, "boulder_count": 4, "top_count": 2},
+                        {"month": "6月", "top_rate": 40.0, "boulder_count": 5, "top_count": 2},
+                        {"month": "7月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "8月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "9月", "top_rate": 100.0, "boulder_count": 4, "top_count": 4},
+                        {"month": "10月", "top_rate": 80.0, "boulder_count": 5, "top_count": 4},
+                        {"month": "11月", "top_rate": 100.0, "boulder_count": 3, "top_count": 3},
+                        {"month": "12月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "上半期", "top_rate": 42.86, "boulder_count": 21, "top_count": 9},
+                        {"month": "下半期", "top_rate": 91.67, "boulder_count": 12, "top_count": 11},
+                        {"month": "年間", "top_rate": 60.61, "boulder_count": 33, "top_count": 20}
+                    ]
+                },
+                {
+                    "grade": "3級",
+                    "monthly_info": [
+                        {"month": "1月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "2月", "top_rate": 0.0, "boulder_count": 2, "top_count": 0},
+                        {"month": "3月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "4月", "top_rate": 0.0, "boulder_count": 2, "top_count": 0},
+                        {"month": "5月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "6月", "top_rate": 0.0, "boulder_count": 1, "top_count": 0},
+                        {"month": "7月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "8月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "9月", "top_rate": 50.0, "boulder_count": 2, "top_count": 1},
+                        {"month": "10月", "top_rate": 0.0, "boulder_count": 3, "top_count": 0},
+                        {"month": "11月", "top_rate": 0.0, "boulder_count": 1, "top_count": 0},
+                        {"month": "12月", "top_rate": null, "boulder_count": 0, "top_count": 0},
+                        {"month": "上半期", "top_rate": 0.0, "boulder_count": 5, "top_count": 0},
+                        {"month": "下半期", "top_rate": 16.67, "boulder_count": 6, "top_count": 1},
+                        {"month": "年間", "top_rate": 9.09, "boulder_count": 11, "top_count": 1}
+                    ]
                 }
-              }
-            }
-          }
+            ]
+        };
+
+        const gradeColors = {
+            "入門": "rgb(255, 182, 193)",
+            "8-6級": "rgb(255, 165, 0)",
+            "5級": "rgb(255, 255, 255)",
+            "4級": "rgb(255, 255, 0)",
+            "3級": "rgb(0, 128, 0)",
+            "2級": "rgb(255, 0, 0)"
+        };
+
+        const monthOrder = ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月", "上半期", "下半期", "年間"];
+
+        function createChart(gradeData) {
+            const grade = gradeData.grade;
+            const ctx = document.getElementById(`chart-${grade}`);
+            if (!ctx) return;
+
+            const monthlyData = gradeData.monthly_info;
+            const displayData = [];
+            const actualData = [];
+
+            monthlyData.forEach(item => {
+                if (item.top_rate === null) {
+                    displayData.push(null);
+                } else if (item.top_rate === 0 && item.boulder_count >= 1) {
+                    displayData.push(0.4);
+                } else {
+                    displayData.push(item.top_rate);
+                }
+                actualData.push(item);
+            });
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: monthOrder,
+                    datasets: [{
+                        label: `${grade} Top Rate (%)`,
+                        data: displayData,
+                        backgroundColor: gradeColors[grade] || 'rgb(128, 128, 128)',
+                        borderColor: grade === "5級" ? 'rgb(200, 200, 200)' : gradeColors[grade] || 'rgb(128, 128, 128)',
+                        borderWidth: grade === "5級" ? 2 : 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Top Rate (%)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Month'
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            enabled: true,
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                title: function(context) {
+                                    return context[0].label;
+                                },
+                                label: function(context) {
+                                    const index = context.dataIndex;
+                                    if (index >= 0 && index < actualData.length) {
+                                        const item = actualData[index];
+                                        if (item.top_rate === null) {
+                                            return [];
+                                        }
+                                        return [
+                                            `Top Rate: ${item.top_rate}%`,
+                                            `Boulder Count: ${item.boulder_count}`,
+                                            `Top Count: ${item.top_count}`
+                                        ];
+                                    }
+                                    return [];
+                                }
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
         }
-      });
-    });
-  </script>
+
+        data.result_info.forEach(gradeData => {
+            createChart(gradeData);
+        });
+    </script>
 </body>
 </html>
