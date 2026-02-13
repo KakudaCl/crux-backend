@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 import os
 
 from app.database import get_db, engine, Base
-from app.routers import top_rates, challenges, area_top_rates
+from app.routers import top_rates, challenges, area_top_rates, trylogs
 
 # 環境変数の読み込み
 APP_NAME = os.getenv("APP_NAME", "CRUX Backend API")
@@ -38,6 +38,7 @@ app.add_middleware(
 app.include_router(top_rates.router, tags=["Top Rates"])
 app.include_router(challenges.router, tags=["Challenges"])
 app.include_router(area_top_rates.router, tags=["Area Top Rates"])
+app.include_router(trylogs.router, tags=["Try Logs"])
 
 
 @app.on_event("startup")
