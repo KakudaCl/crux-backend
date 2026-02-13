@@ -14,7 +14,7 @@ INSERT INTO gym_info (gym_name, prefecture_id) VALUES
 INSERT INTO grade_info (gym_id, grade_name, grade_color) VALUES
     (2, '入門', 'DB7093'),  
     (2, '8-6Q', 'FF7F00'), 
-    (2, '5Q', 'E7E7E7'),
+    (2, '5Q', 'C0C6C9'),
     (2, '4Q', 'E1E100'),   
     (2, '3Q', '006400'),
     (2, '2Q', 'FF3D3D'),
@@ -35,7 +35,7 @@ INSERT INTO grade_info (gym_id, grade_name, grade_color) VALUES
     (3, 'V8~', '000000'),
     (1, '10-8Q', 'FF69B4'),
     (1, '7Q', 'FFA500'),
-    (1, '6Q', 'FFFFFF'),
+    (1, '6Q', 'C0C6C9'),
     (1, '5Q', 'FF0000'),
     (1, '4Q', '000080'),
     (1, '3Q', '800080'),
