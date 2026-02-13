@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS area_info (
     "gym_id" INTEGER NOT NULL
         REFERENCES gym_info("gym_id")
         ON DELETE CASCADE,
-    "area_name" VARCHAR(10) NOT NULL
+    "area_name" VARCHAR(20) NOT NULL
 );
 
 COMMENT ON TABLE area_info IS 'エリア情報';

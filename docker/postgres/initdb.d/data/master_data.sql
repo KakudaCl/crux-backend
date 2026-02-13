@@ -32,14 +32,24 @@ INSERT INTO grade_info (gym_id, grade_name, grade_color) VALUES
     (3, 'V5', '006400'),
     (3, 'V6', '000080'),
     (3, 'V7', 'FF8C00'),
-    (3, 'V8~', '000000');
+    (3, 'V8~', '000000'),
+    (1, '10-8Q', 'FF69B4'),
+    (1, '7Q', 'FFA500'),
+    (1, '6Q', 'FFFFFF'),
+    (1, '5Q', 'FF0000'),
+    (1, '4Q', '000080'),
+    (1, '3Q', '800080'),
+    (1, '2Q', '006400'),
+    (1, '1Q', '1E90FF'),
+    (1, '1D', 'FFFF00'),
+    (1, '2D', '000000');
 
 -- トライ結果情報の初期データ
 INSERT INTO result_info (result_name) VALUES
     ('FLASH'),    -- 一撃でクリア
     ('TOP'),      -- 完登
     ('ZONE'),     -- ゾーンまで到達
-    ('NOSCORE')   -- スコアなし（トライのみ）
+    ('N.S.')   -- スコアなし（トライのみ）
 ;
 
 -- エリア情報の初期データ（一般的な壁の種類）
@@ -55,7 +65,15 @@ INSERT INTO area_info (gym_id, area_name) VALUES
     (3, 'うすかぶり'),
     (3, '強傾斜'),
     (3, 'シップウォール'),
-    (3, 'シップルーフ');
+    (3, 'シップルーフ'),
+    (1, 'MITAKE'),
+    (1, 'ENA'),
+    (1, 'MIZUGAKI'),
+    (1, 'SIOBARA'),
+    (1, 'KASAGI'),
+    (1, 'HOURAI'),
+    (1, 'HIEI'),
+    (1, 'COMPETITION');
 
 INSERT INTO try_record (gym_id, problem_number, area_id, grade_id, result_id, try_date, day_count, monthly_info) VALUES
     -- 2025年1月記録 BMO
