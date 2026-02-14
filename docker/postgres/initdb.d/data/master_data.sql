@@ -38,7 +38,7 @@ INSERT INTO grade_info (gym_id, grade_name, grade_color) VALUES
     (1, '6Q', 'C0C6C9'),
     (1, '5Q', 'FF0000'),
     (1, '4Q', '000080'),
-    (1, '3Q', '800080'),
+    (1, '3Q', '8B4513'),
     (1, '2Q', '006400'),
     (1, '1Q', '1E90FF'),
     (1, '1D', 'FFFF00'),
