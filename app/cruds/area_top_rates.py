@@ -58,8 +58,8 @@ def get_area_top_rates(
         return schemas.AreaTopRateResponse(result_info=[])
 
     # グレード情報とエリア情報のマッピングを取得
-    grade_mapping = db.query(GradeInfo.grade_id, GradeInfo.grade_name).all()
-    grade_dict = {gid: gname for gid, gname in grade_mapping}
+    grade_mapping = db.query(GradeInfo.grade_id, GradeInfo.grade_name, GradeInfo.grade_color).all()
+    grade_dict = {gid: {"grade_name": gname, "grade_color": gcolor} for gid, gname, gcolor in grade_mapping}
 
     # 対象ジムの全エリアを取得（仕様：全てのエリア名を項目として含める）
     area_mapping = (
@@ -90,7 +90,9 @@ def get_area_top_rates(
     result_info: List[schemas.GradeAreaTopRate] = []
 
     for grade_id in sorted(grade_area_data.keys()):
-        grade_name = grade_dict.get(grade_id, f"グレードID:{grade_id}")
+        grade_info = grade_dict.get(grade_id, {"grade_name": f"グレードID:{grade_id}", "grade_color": "000000"})
+        grade_name = grade_info["grade_name"]
+        grade_color = grade_info["grade_color"]
         area_info_list: List[schemas.AreaInfo] = []
 
         # 全てのエリアを項目として含める（データがないエリアは top_rate=null, 件数=0）
@@ -123,6 +125,7 @@ def get_area_top_rates(
         result_info.append(
             schemas.GradeAreaTopRate(
                 grade=grade_name,
+                grade_color=grade_color,
                 area_info=area_info_list
             )
         )

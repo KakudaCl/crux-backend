@@ -26,6 +26,7 @@ class GradeAreaTopRate(BaseModel):
     グレード別エリア完登率情報スキーマ
     """
     grade: str = Field(..., description="グレード名（例: 3級）")
+    grade_color: str = Field(..., description="グレード色（カラーコード）")
     area_info: List[AreaInfo] = Field(..., description="エリア別情報")
 
     class Config:

@@ -25,6 +25,7 @@ class GradeTopRate(BaseModel):
     グレード別完登率情報スキーマ
     """
     grade: str = Field(..., description="グレード名（例: 3級）")
+    grade_color: str = Field(..., description="グレード色（カラーコード）")
     monthly_info: List[MonthlyInfo] = Field(
         ..., description="月別情報（月、上半期、下半期、年間を含む）"
     )

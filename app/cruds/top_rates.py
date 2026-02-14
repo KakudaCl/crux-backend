@@ -34,8 +34,8 @@ def get_top_rates(
     if not try_records:
         return schemas.TopRateResponse(result_info=[])
 
-    grade_mapping = db.query(GradeInfo.grade_id, GradeInfo.grade_name).all()
-    grade_dict = {gid: gname for gid, gname in grade_mapping}
+    grade_mapping = db.query(GradeInfo.grade_id, GradeInfo.grade_name, GradeInfo.grade_color).all()
+    grade_dict = {gid: {"grade_name": gname, "grade_color": gcolor} for gid, gname, gcolor in grade_mapping}
 
     grade_month_data: Dict[
         int, Dict[int, Dict[str, int]]
@@ -52,7 +52,9 @@ def get_top_rates(
     result_info: List[schemas.GradeTopRate] = []
 
     for grade_id in sorted(grade_month_data.keys()):
-        grade_name = grade_dict.get(grade_id, f"グレードID:{grade_id}")
+        grade_info = grade_dict.get(grade_id, {"grade_name": f"グレードID:{grade_id}", "grade_color": "000000"})
+        grade_name = grade_info["grade_name"]
+        grade_color = grade_info["grade_color"]
         monthly_info: List[schemas.MonthlyInfo] = []
         first_half_total = 0
         first_half_top = 0
@@ -132,7 +134,7 @@ def get_top_rates(
             )
         )
         result_info.append(
-            schemas.GradeTopRate(grade=grade_name, monthly_info=monthly_info)
+            schemas.GradeTopRate(grade=grade_name, grade_color=grade_color, monthly_info=monthly_info)
         )
 
     return schemas.TopRateResponse(result_info=result_info)
