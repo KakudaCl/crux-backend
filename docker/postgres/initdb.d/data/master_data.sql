@@ -352,7 +352,7 @@ INSERT INTO try_record (gym_id, problem_number, area_id, grade_id, result_id, tr
     (1, null, 18, 26, 1, '2026-02-14', 1, null, null),
     (1, null, 20, 26, 3, '2026-02-14', 1, null, 'スタートでめちゃ滑る'),
     (1, null, 20, 26, 3, '2026-02-14', 1, null, null),
-    (1, null, 15, 27, 2, '2026-02-14', 1, null, '白ホールド'),
+    (1, null, 15, 27, 2, '2026-02-14', 1, null, '3Q二完登 ヒールスタートがきつい'),
     (1, null, 19, 27, 4, '2026-02-14', 1, null, null),
     (1, null, 20, 27, 4, '2026-02-14', 1, null, null),
     (1, null, 20, 28, 4, '2026-02-14', 1, null, '2Q初トライ');
