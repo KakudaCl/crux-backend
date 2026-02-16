@@ -341,7 +341,7 @@ INSERT INTO try_record (gym_id, problem_number, area_id, grade_id, result_id, tr
     (1, null, 13, 25, 1, '2026-02-14', 1, null, '紫ホールドスラブ'),
     (1, null, 15, 25, 1, '2026-02-14', 1, null, null),
     (1, null, 17, 25, 1, '2026-02-14', 1, null, null),
-    (1, null, 18, 25, 1, '2026-02-14', 1, null, null),
+    (1, null, 18, 25, 2, '2026-02-14', 1, null, null),
     (1, null, 19, 25, 1, '2026-02-14', 1, null, null),
     (1, null, 20, 25, 1, '2026-02-14', 1, null, null),
     (1, null, 20, 25, 1, '2026-02-14', 1, null, null),
