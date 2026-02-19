@@ -9,7 +9,6 @@ from sqlalchemy.orm import Session
 from app import schemas
 from app.database import get_db
 from app.cruds import top_rates as top_rates_crud
-from app.cruds import area_top_rates as area_top_rates_crud
 
 router = APIRouter()
 
@@ -78,7 +77,7 @@ async def get_area_top_rates(
             detail="ジムIDは1以上の値を指定してください",
         )
     try:
-        return area_top_rates_crud.get_area_top_rates(
+        return top_rates_crud.get_area_top_rates(
             db, year=year, period=period, gym_id=gym_id
         )
     except Exception as e:

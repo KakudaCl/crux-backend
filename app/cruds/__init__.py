@@ -4,6 +4,5 @@ CRUDs Package
 """
 
 from . import top_rates
-from . import area_top_rates
 
-__all__ = ["top_rates", "area_top_rates"]
+__all__ = ["top_rates"]
