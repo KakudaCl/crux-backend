@@ -26,12 +26,12 @@ async def get_top_rates(
     db: Session = Depends(get_db),
 ):
     """
-    年度/ジム/グレード別の完登率情報を取得する。
+    年度/ジム/グレード別の完登率情報を取得する
     """
-    if year < 1900 or year > 2100:
+    if year < 2000 or year > 2100:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="年度は1900〜2100の範囲で指定してください",
+            detail="年度は2000〜2100の範囲で指定してください",
         )
     if gym_id < 1:
         raise HTTPException(
@@ -60,17 +60,12 @@ async def get_area_top_rates(
     db: Session = Depends(get_db),
 ):
     """
-    年度/期間/ジム/グレード別のエリア別完登率情報を取得する。
-
-    期間:
-    - 1: 上半期（1-6月）
-    - 2: 下半期（7-12月）
-    - 3: 年間（1-12月）
+    年度/ジム/グレード別の完登率情報(エリア別)を取得する
     """
-    if year < 1900 or year > 2100:
+    if year < 2000 or year > 2100:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="年度は1900〜2100の範囲で指定してください",
+            detail="年度は2000〜2100の範囲で指定してください",
         )
     if period not in [1, 2, 3]:
         raise HTTPException(

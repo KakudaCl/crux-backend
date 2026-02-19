@@ -26,13 +26,13 @@ async def get_trylogs(
     db: Session = Depends(get_db),
 ):
     """
-    年度/ジム/月別のトライログ情報を取得する。
+    年度/ジム/月別のトライログ情報を取得する
     """
     # パラメータバリデーション
-    if year < 1900 or year > 2100:
+    if year < 2000 or year > 2100:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="年度は1900〜2100の範囲で指定してください",
+            detail="年度は2000〜2100の範囲で指定してください",
         )
     if month < 1 or month > 12:
         raise HTTPException(
