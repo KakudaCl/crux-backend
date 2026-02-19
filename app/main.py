@@ -8,8 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import os
 
-from app.database import get_db, engine, Base
-from app.routers import top_rates, challenges, area_top_rates, trylogs
+from app.database import get_db, engine
+from app.routers import top_rates, challenges, trylogs
 
 # 環境変数の読み込み
 APP_NAME = os.getenv("APP_NAME", "CRUX Backend API")
@@ -35,9 +35,8 @@ app.add_middleware(
 )
 
 # APIルーターの登録
-app.include_router(top_rates.router, tags=["Top Rates"])
+app.include_router(top_rates.router, tags=["top_rate"])
 app.include_router(challenges.router, tags=["Challenges"])
-app.include_router(area_top_rates.router, tags=["Area Top Rates"])
 app.include_router(trylogs.router, tags=["Try Logs"])
 
 
@@ -48,7 +47,7 @@ async def startup_event():
     データベース接続の確認を行う
     """
     print(f"🚀 Starting {APP_NAME} v{APP_VERSION}")
-    print(f"📊 Database connection check...")
+    print("📊 Database connection check...")
     
     # データベース接続の確認
     try:
