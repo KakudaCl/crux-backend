@@ -9,7 +9,6 @@ from app.models.grade_info import GradeInfo
 from app.models.result_info import ResultInfo
 from app.models.area_info import AreaInfo
 from app.models.try_record import TryRecord
-from app.models.challenge import Challenge
 
 __all__ = [
     "PrefectureInfo",
@@ -18,5 +17,4 @@ __all__ = [
     "ResultInfo",
     "AreaInfo",
     "TryRecord",
-    "Challenge",
 ]
