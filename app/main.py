@@ -45,17 +45,17 @@ async def startup_event():
     アプリケーション起動時の処理
     データベース接続の確認を行う
     """
-    print(f"🚀 Starting {APP_NAME} v{APP_VERSION}")
-    print("📊 Database connection check...")
+    print(f"Starting {APP_NAME} v{APP_VERSION}")
+    print("Database connection check...")
     
     # データベース接続の確認
     try:
         # エンジンの接続テスト
         with engine.connect() as connection:
-            print("✅ Database connection successful!")
+            print("Database connection successful!")
     except Exception as e:
-        print(f"❌ Database connection failed: {e}")
-        print("⚠️  Please ensure PostgreSQL is running and configuration is correct.")
+        print(f"Database connection failed: {e}")
+        print("Please ensure PostgreSQL is running and configuration is correct.")
 
 
 @app.on_event("shutdown")
@@ -63,7 +63,7 @@ async def shutdown_event():
     """
     アプリケーション終了時の処理
     """
-    print(f"👋 Shutting down {APP_NAME}")
+    print(f"Shutting down {APP_NAME}")
     engine.dispose()
 
 
@@ -77,7 +77,6 @@ async def root():
         "name": APP_NAME,
         "version": APP_VERSION,
         "status": "running",
-        "message": "Welcome to CRUX Backend API"
     }
 
 
