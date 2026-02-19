@@ -6,12 +6,10 @@ Pydanticスキーマの定義
 from app.schemas.top_rates import (
     MonthlyInfo,
     GradeTopRate,
-    TopRateResponse
-)
-from app.schemas.area_top_rates import (
+    TopRateResponse,
     AreaInfo,
     GradeAreaTopRate,
-    AreaTopRateResponse
+    AreaTopRateResponse,
 )
 from app.schemas.trylogs import (
     TryLogItem,
@@ -20,15 +18,14 @@ from app.schemas.trylogs import (
 )
 
 __all__ = [
-    # Top Rates schemas
+    # top_rate schemas
     "MonthlyInfo",
     "GradeTopRate",
     "TopRateResponse",
-    # Area Top Rates schemas
     "AreaInfo",
     "GradeAreaTopRate",
     "AreaTopRateResponse",
-    # Try Logs schemas
+    # trylog schemas
     "TryLogItem",
     "DailyTryLog",
     "TryLogResponse",
