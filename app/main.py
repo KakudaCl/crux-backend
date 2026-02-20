@@ -22,7 +22,7 @@ app = FastAPI(
     title=APP_NAME,
     version=APP_VERSION,
     description="ボルダリングのトライ記録を管理するバックエンドAPI",
-    debug=DEBUG
+    debug=DEBUG,
 )
 
 # CORSミドルウェアの設定
@@ -47,7 +47,7 @@ async def startup_event():
     """
     print(f"Starting {APP_NAME} v{APP_VERSION}")
     print("Database connection check...")
-    
+
     # データベース接続の確認
     try:
         # エンジンの接続テスト
@@ -92,20 +92,15 @@ async def health_check(db: Session = Depends(get_db)):
         db_status = "connected"
     except Exception as e:
         db_status = f"error: {str(e)}"
-    
+
     return {
         "status": "healthy" if db_status == "connected" else "unhealthy",
         "database": db_status,
-        "version": APP_VERSION
+        "version": APP_VERSION,
     }
 
 
 if __name__ == "__main__":
     import uvicorn
-    
-    uvicorn.run(
-        "app.main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=DEBUG
-    )
+
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=DEBUG)

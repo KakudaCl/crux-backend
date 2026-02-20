@@ -54,7 +54,9 @@ async def get_top_rates(
 )
 async def get_area_top_rates(
     year: int = Query(..., description="年度", example=2026),
-    period: int = Query(..., description="期間（1:上半期、2:下半期、3:年間）", example=3),
+    period: int = Query(
+        ..., description="期間（1:上半期、2:下半期、3:年間）", example=3
+    ),
     gym_id: int = Query(..., description="ジムID", example=1),
     db: Session = Depends(get_db),
 ):

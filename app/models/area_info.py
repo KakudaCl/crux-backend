@@ -11,38 +11,24 @@ from app.core.database import Base
 
 class AreaInfo(Base):
     """エリア情報モデル"""
-    
+
     __tablename__ = "area_info"
-    
+
     # カラム定義
-    area_id = Column(
-        Integer,
-        primary_key=True,
-        autoincrement=True,
-        comment="エリアID"
-    )
+    area_id = Column(Integer, primary_key=True, autoincrement=True, comment="エリアID")
     gym_id = Column(
         Integer,
         ForeignKey("gym_info.gym_id", ondelete="CASCADE"),
         nullable=False,
-        comment="ジムID"
+        comment="ジムID",
     )
-    area_name = Column(
-        String(10),
-        nullable=False,
-        comment="エリア名"
-    )
-    
+    area_name = Column(String(10), nullable=False, comment="エリア名")
+
     # リレーションシップ
-    gym = relationship(
-        "GymInfo",
-        back_populates="areas"
-    )
+    gym = relationship("GymInfo", back_populates="areas")
     try_records = relationship(
-        "TryRecord",
-        back_populates="area",
-        cascade="all, delete-orphan"
+        "TryRecord", back_populates="area", cascade="all, delete-orphan"
     )
-    
+
     def __repr__(self) -> str:
         return f"<AreaInfo(id={self.area_id}, name='{self.area_name}')>"

@@ -16,15 +16,11 @@ engine = create_engine(
     echo=settings.DEBUG,  # DEBUGモードの時はSQLをログ出力
     pool_pre_ping=True,  # 接続の有効性を事前にチェック
     pool_size=5,  # コネクションプールのサイズ
-    max_overflow=10  # プールサイズを超えた場合の最大接続数
+    max_overflow=10,  # プールサイズを超えた場合の最大接続数
 )
 
 # セッションファクトリーの作成
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine
-)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # モデルの基底クラス
 Base = declarative_base()
@@ -33,10 +29,10 @@ Base = declarative_base()
 def get_db() -> Generator[Session, None, None]:
     """
     データベースセッションを取得する依存性注入用関数
-    
+
     FastAPIのDependency Injectionで使用される
     各リクエストごとに新しいセッションを作成し、処理終了後にクローズする
-    
+
     Yields:
         Session: SQLAlchemyのデータベースセッション
     """

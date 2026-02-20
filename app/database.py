@@ -8,8 +8,7 @@ load_dotenv()
 
 # データベース接続URL
 DATABASE_URL = os.getenv(
-    "DATABASE_URL",
-    "postgresql://crux_user:crux_password@localhost:5432/crux_db"
+    "DATABASE_URL", "postgresql://crux_user:crux_password@localhost:5432/crux_db"
 )
 
 # SQLAlchemyエンジンの作成

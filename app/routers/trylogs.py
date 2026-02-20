@@ -46,9 +46,7 @@ async def get_trylogs(
         )
 
     try:
-        return trylogs_crud.get_trylogs(
-            db, year=year, month=month, gym_id=gym_id
-        )
+        return trylogs_crud.get_trylogs(db, year=year, month=month, gym_id=gym_id)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

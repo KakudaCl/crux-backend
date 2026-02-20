@@ -11,11 +11,7 @@ from app.schemas.top_rates import (
     GradeAreaTopRate,
     AreaTopRateResponse,
 )
-from app.schemas.trylogs import (
-    TryLogItem,
-    DailyTryLog,
-    TryLogResponse
-)
+from app.schemas.trylogs import TryLogItem, DailyTryLog, TryLogResponse
 
 __all__ = [
     # top_rate schemas

@@ -15,9 +15,7 @@ from app.models.result_info import ResultInfo
 from app.models.area_info import AreaInfo as AreaInfoModel
 
 
-def get_top_rates(
-    db: Session, year: int, gym_id: int
-) -> schemas.TopRateResponse:
+def get_top_rates(db: Session, year: int, gym_id: int) -> schemas.TopRateResponse:
     """
     年度・ジムIDを指定して完登率情報を取得する。
     """
@@ -35,12 +33,17 @@ def get_top_rates(
     if not try_records:
         return schemas.TopRateResponse(result_info=[])
 
-    grade_mapping = db.query(GradeInfo.grade_id, GradeInfo.grade_name, GradeInfo.grade_color).all()
-    grade_dict = {gid: {"grade_name": gname, "grade_color": gcolor} for gid, gname, gcolor in grade_mapping}
+    grade_mapping = db.query(
+        GradeInfo.grade_id, GradeInfo.grade_name, GradeInfo.grade_color
+    ).all()
+    grade_dict = {
+        gid: {"grade_name": gname, "grade_color": gcolor}
+        for gid, gname, gcolor in grade_mapping
+    }
 
-    grade_month_data: Dict[
-        int, Dict[int, Dict[str, int]]
-    ] = defaultdict(lambda: defaultdict(lambda: {"total": 0, "top": 0}))
+    grade_month_data: Dict[int, Dict[int, Dict[str, int]]] = defaultdict(
+        lambda: defaultdict(lambda: {"total": 0, "top": 0})
+    )
 
     for record in try_records:
         grade_id = record.grade_id
@@ -53,7 +56,9 @@ def get_top_rates(
     result_info: List[schemas.GradeTopRate] = []
 
     for grade_id in sorted(grade_month_data.keys()):
-        grade_info = grade_dict.get(grade_id, {"grade_name": f"グレードID:{grade_id}", "grade_color": "000000"})
+        grade_info = grade_dict.get(
+            grade_id, {"grade_name": f"グレードID:{grade_id}", "grade_color": "000000"}
+        )
         grade_name = grade_info["grade_name"]
         grade_color = grade_info["grade_color"]
         monthly_info: List[schemas.MonthlyInfo] = []
@@ -64,9 +69,7 @@ def get_top_rates(
 
         # 1-12月すべてを含める
         for month in range(1, 13):
-            data = grade_month_data[grade_id].get(
-                month, {"total": 0, "top": 0}
-            )
+            data = grade_month_data[grade_id].get(month, {"total": 0, "top": 0})
             boulder_count = data["total"]
             top_count = data["top"]
 
@@ -122,9 +125,7 @@ def get_top_rates(
         annual_total = first_half_total + second_half_total
         annual_top = first_half_top + second_half_top
         annual_rate = (
-            round((annual_top / annual_total * 100), 2)
-            if annual_total > 0
-            else None
+            round((annual_top / annual_total * 100), 2) if annual_total > 0 else None
         )
         monthly_info.append(
             schemas.MonthlyInfo(
@@ -135,7 +136,9 @@ def get_top_rates(
             )
         )
         result_info.append(
-            schemas.GradeTopRate(grade=grade_name, grade_color=grade_color, monthly_info=monthly_info)
+            schemas.GradeTopRate(
+                grade=grade_name, grade_color=grade_color, monthly_info=monthly_info
+            )
         )
 
     return schemas.TopRateResponse(result_info=result_info)
@@ -184,8 +187,13 @@ def get_area_top_rates(
         return schemas.AreaTopRateResponse(result_info=[])
 
     # グレード情報とエリア情報のマッピングを取得
-    grade_mapping = db.query(GradeInfo.grade_id, GradeInfo.grade_name, GradeInfo.grade_color).all()
-    grade_dict = {gid: {"grade_name": gname, "grade_color": gcolor} for gid, gname, gcolor in grade_mapping}
+    grade_mapping = db.query(
+        GradeInfo.grade_id, GradeInfo.grade_name, GradeInfo.grade_color
+    ).all()
+    grade_dict = {
+        gid: {"grade_name": gname, "grade_color": gcolor}
+        for gid, gname, gcolor in grade_mapping
+    }
 
     # 対象ジムの全エリアを取得（仕様：全てのエリア名を項目として含める）
     area_mapping = (
@@ -199,9 +207,9 @@ def get_area_top_rates(
 
     # グレード×エリアごとにデータを集計
     # 構造: {grade_id: {area_id: {"total": int, "top": int}}}
-    grade_area_data: Dict[
-        int, Dict[int, Dict[str, int]]
-    ] = defaultdict(lambda: defaultdict(lambda: {"total": 0, "top": 0}))
+    grade_area_data: Dict[int, Dict[int, Dict[str, int]]] = defaultdict(
+        lambda: defaultdict(lambda: {"total": 0, "top": 0})
+    )
 
     for record in try_records:
         grade_id = record.grade_id
@@ -216,7 +224,9 @@ def get_area_top_rates(
     result_info: List[schemas.GradeAreaTopRate] = []
 
     for grade_id in sorted(grade_area_data.keys()):
-        grade_info = grade_dict.get(grade_id, {"grade_name": f"グレードID:{grade_id}", "grade_color": "000000"})
+        grade_info = grade_dict.get(
+            grade_id, {"grade_name": f"グレードID:{grade_id}", "grade_color": "000000"}
+        )
         grade_name = grade_info["grade_name"]
         grade_color = grade_info["grade_color"]
         area_info_list: List[schemas.AreaInfo] = []
@@ -250,9 +260,7 @@ def get_area_top_rates(
 
         result_info.append(
             schemas.GradeAreaTopRate(
-                grade=grade_name,
-                grade_color=grade_color,
-                area_info=area_info_list
+                grade=grade_name, grade_color=grade_color, area_info=area_info_list
             )
         )
 
