@@ -12,6 +12,7 @@ from app.schemas.top_rates import (
     AreaTopRateResponse,
 )
 from app.schemas.trylogs import TryLogItem, DailyTryLog, TryLogResponse
+from app.schemas.gyms import GymInfo, GymsNameResponse
 
 __all__ = [
     # top_rate schemas
@@ -25,4 +26,7 @@ __all__ = [
     "TryLogItem",
     "DailyTryLog",
     "TryLogResponse",
+    # gyms schemas
+    "GymInfo",
+    "GymsNameResponse",
 ]
