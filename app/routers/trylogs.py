@@ -128,3 +128,36 @@ async def get_area_top_rates(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"内部処理エラーが発生しました: {str(e)}",
         )
+
+
+@router.get(
+    "/trylog/best/prob",
+    summary="ベスト完登課題取得",
+    response_model=schemas.BestProbResponse,
+    status_code=status.HTTP_200_OK,
+)
+async def get_best_prob(
+    year: int = Query(..., description="年度", example=2026),
+    gym_id: int = Query(..., description="ジムID", example=1),
+    db: Session = Depends(get_db),
+):
+    """
+    完登課題のベスト記録（シーズンベスト・パーソナルベスト）を取得する
+    """
+    if year < 2000 or year > 2100:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="年度は2000〜2100の範囲で指定してください",
+        )
+    if gym_id < 1:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="ジムIDは1以上の値を指定してください",
+        )
+    try:
+        return trylogs_crud.get_best_prob(db, year=year, gym_id=gym_id)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"内部処理エラーが発生しました: {str(e)}",
+        )

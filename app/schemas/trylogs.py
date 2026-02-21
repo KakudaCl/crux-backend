@@ -128,3 +128,35 @@ class AreaTopRateResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class BestProbItem(BaseModel):
+    """
+    ベスト完登課題の個別スキーマ
+    """
+
+    prob_no: int = Field(..., description="課題番号", example=23)
+    grade: str = Field(..., description="グレード名", example="3Q")
+    grade_color: str = Field(
+        ..., description="グレード色（カラーコード）", example="FFFFFF"
+    )
+    record_date: date = Field(..., description="記録日", example="2026-02-21")
+
+    class Config:
+        from_attributes = True
+
+
+class BestProbResponse(BaseModel):
+    """
+    ベスト完登課題取得APIのレスポンススキーマ
+    """
+
+    season_best: Optional[BestProbItem] = Field(
+        None, description="シーズンベスト（対象レコードがない場合はnull）"
+    )
+    personal_best: Optional[BestProbItem] = Field(
+        None, description="パーソナルベスト（対象レコードがない場合はnull）"
+    )
+
+    class Config:
+        from_attributes = True

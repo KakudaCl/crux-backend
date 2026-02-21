@@ -321,3 +321,68 @@ def get_area_top_rates(
         )
 
     return schemas.AreaTopRateResponse(result_info=result_info)
+
+
+def get_best_prob(
+    db: Session, year: int, gym_id: int
+) -> schemas.BestProbResponse:
+    """
+    年度・ジムIDを指定してベスト完登課題を取得する。
+
+    season_best: 指定年度・ジムでFLASH/TOPの中で最大課題番号のレコード
+    personal_best: 指定ジムの全期間でFLASH/TOPの中で最大課題番号のレコード
+    同一最大課題番号が複数存在する場合は最も古い日付のレコードを返す。
+    """
+    COMPLETED_RESULT_IDS = [1, 2]  # 1: FLASH, 2: TOP
+
+    season_record = (
+        db.query(TryRecord)
+        .join(GradeInfo, TryRecord.grade_id == GradeInfo.grade_id)
+        .filter(
+            extract("year", TryRecord.try_date) == year,
+            TryRecord.gym_id == gym_id,
+            TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
+            TryRecord.problem_number.isnot(None),
+        )
+        .order_by(TryRecord.problem_number.desc(), TryRecord.try_date.asc())
+        .first()
+    )
+
+    season_best = (
+        schemas.BestProbItem(
+            prob_no=season_record.problem_number,
+            grade=season_record.grade.grade_name,
+            grade_color=season_record.grade.grade_color,
+            record_date=season_record.try_date,
+        )
+        if season_record
+        else None
+    )
+
+    personal_record = (
+        db.query(TryRecord)
+        .join(GradeInfo, TryRecord.grade_id == GradeInfo.grade_id)
+        .filter(
+            TryRecord.gym_id == gym_id,
+            TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
+            TryRecord.problem_number.isnot(None),
+        )
+        .order_by(TryRecord.problem_number.desc(), TryRecord.try_date.asc())
+        .first()
+    )
+
+    personal_best = (
+        schemas.BestProbItem(
+            prob_no=personal_record.problem_number,
+            grade=personal_record.grade.grade_name,
+            grade_color=personal_record.grade.grade_color,
+            record_date=personal_record.try_date,
+        )
+        if personal_record
+        else None
+    )
+
+    return schemas.BestProbResponse(
+        season_best=season_best,
+        personal_best=personal_best,
+    )

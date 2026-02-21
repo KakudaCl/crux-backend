@@ -13,6 +13,8 @@ from app.schemas.trylogs import (
     AreaInfo,
     GradeAreaTopRate,
     AreaTopRateResponse,
+    BestProbItem,
+    BestProbResponse,
 )
 from app.schemas.gyms import GymInfo, GymsNameResponse
 
@@ -28,6 +30,9 @@ __all__ = [
     "AreaInfo",
     "GradeAreaTopRate",
     "AreaTopRateResponse",
+    # best prob schemas
+    "BestProbItem",
+    "BestProbResponse",
     # gyms schemas
     "GymInfo",
     "GymsNameResponse",
