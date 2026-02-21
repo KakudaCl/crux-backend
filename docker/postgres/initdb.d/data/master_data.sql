@@ -8,7 +8,7 @@ INSERT INTO prefecture_info (prefecture_name) VALUES
 
 -- ジム情報の初期データ
 INSERT INTO gym_info (gym_name, prefecture_id) VALUES
-    ('Dボルダリングなんば', 1), ('クライミングバム大阪店', 1), ('CRUX大阪', 1),('ロックメイト大津店', 2), ('B-PUMP OGIKUBO', 3);
+    ('Dボルダリングなんば', 1), ('クライミングバム大阪店', 1), ('CRUX大阪', 1);
 
 -- グレード情報の初期データ（一般的なボルダリンググレード）
 INSERT INTO grade_info (gym_id, grade_name, grade_color) VALUES
