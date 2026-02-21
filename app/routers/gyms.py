@@ -14,7 +14,7 @@ router = APIRouter()
 
 
 @router.get(
-    "/gyms_name",
+    "/gym/list",
     summary="ジム名取得",
     response_model=schemas.GymsNameResponse,
     status_code=status.HTTP_200_OK,

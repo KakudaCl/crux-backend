@@ -14,7 +14,7 @@ router = APIRouter()
 
 
 @router.get(
-    "/trylog",
+    "/trylog/list",
     summary="トライログ取得",
     response_model=schemas.TryLogResponse,
     status_code=status.HTTP_200_OK,

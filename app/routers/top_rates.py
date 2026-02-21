@@ -14,8 +14,8 @@ router = APIRouter()
 
 
 @router.get(
-    "/top_rates",
-    summary="完登率取得",
+    "/top_rate/month",
+    summary="マンスリー別完登率取得",
     response_model=schemas.TopRateResponse,
     status_code=status.HTTP_200_OK,
 )
@@ -47,7 +47,7 @@ async def get_top_rates(
 
 
 @router.get(
-    "/top_rates_area",
+    "/top_rate/area",
     summary="エリア別完登率取得",
     response_model=schemas.AreaTopRateResponse,
     status_code=status.HTTP_200_OK,
