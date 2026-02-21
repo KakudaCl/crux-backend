@@ -3,6 +3,6 @@ CRUDs Package
 データベース操作（CRUD）のロジック
 """
 
-from . import top_rates
+from . import trylogs
 
-__all__ = ["top_rates"]
+__all__ = ["trylogs"]
