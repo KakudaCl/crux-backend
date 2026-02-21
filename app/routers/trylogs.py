@@ -60,7 +60,7 @@ async def get_trylogs(
     response_model=schemas.TopRateResponse,
     status_code=status.HTTP_200_OK,
 )
-async def get_top_rates(
+async def get_monthly_top_rates(
     year: int = Query(..., description="年度", example=2026),
     gym_id: int = Query(..., description="ジムID", example=1),
     db: Session = Depends(get_db),
@@ -79,7 +79,7 @@ async def get_top_rates(
             detail="ジムIDは1以上の値を指定してください",
         )
     try:
-        return trylogs_crud.get_top_rates(db, year=year, gym_id=gym_id)
+        return trylogs_crud.get_monthly_top_rates(db, year=year, gym_id=gym_id)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

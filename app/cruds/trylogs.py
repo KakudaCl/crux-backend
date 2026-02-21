@@ -89,7 +89,9 @@ def get_trylogs(
     return schemas.TryLogResponse(all_logs=all_logs)
 
 
-def get_top_rates(db: Session, year: int, gym_id: int) -> schemas.TopRateResponse:
+def get_monthly_top_rates(
+    db: Session, year: int, gym_id: int
+) -> schemas.TopRateResponse:
     """
     年度・ジムIDを指定して完登率情報を取得する。
     """
@@ -220,15 +222,6 @@ def get_area_top_rates(
 ) -> schemas.AreaTopRateResponse:
     """
     年度・期間・ジムIDを指定してエリア別完登率情報を取得する。
-
-    Args:
-        db: データベースセッション
-        year: 年度
-        period: 期間 (1:上半期、2:下半期、3:年間)
-        gym_id: ジムID
-
-    Returns:
-        エリア別完登率情報
     """
     if period == 1:
         month_range = range(1, 7)

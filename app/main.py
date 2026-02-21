@@ -35,8 +35,8 @@ app.add_middleware(
 )
 
 # APIルーターの登録
-app.include_router(gyms.router, prefix="/api", tags=["common"])
-app.include_router(trylogs.router, prefix="/api", tags=["trylog"])
+app.include_router(gyms.router, prefix="/api", tags=["共通"])
+app.include_router(trylogs.router, prefix="/api", tags=["トライログ"])
 
 
 @app.on_event("startup")
