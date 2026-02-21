@@ -160,3 +160,35 @@ class BestProbResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class BestCountItem(BaseModel):
+    """
+    ベスト完登数の個別スキーマ
+    """
+
+    grade: str = Field(..., description="グレード名", example="3Q")
+    grade_color: str = Field(
+        ..., description="グレード色（カラーコード）", example="FFFFFF"
+    )
+    top_count: int = Field(..., description="完登数", example=2)
+    record_date: date = Field(..., description="記録日", example="2026-02-21")
+
+    class Config:
+        from_attributes = True
+
+
+class BestCountResponse(BaseModel):
+    """
+    ベスト完登数取得APIのレスポンススキーマ
+    """
+
+    season_best: Optional[BestCountItem] = Field(
+        None, description="シーズンベスト（対象レコードがない場合はnull）"
+    )
+    personal_best: Optional[BestCountItem] = Field(
+        None, description="パーソナルベスト（対象レコードがない場合はnull）"
+    )
+
+    class Config:
+        from_attributes = True

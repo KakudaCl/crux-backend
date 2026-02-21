@@ -5,7 +5,7 @@ Try Logs / Top Rates CRUD
 
 from sqlalchemy.orm import Session
 from sqlalchemy import extract, and_
-from typing import Dict, List
+from typing import Dict, List, Optional
 from collections import defaultdict
 from datetime import date
 
@@ -385,4 +385,74 @@ def get_best_prob(
     return schemas.BestProbResponse(
         season_best=season_best,
         personal_best=personal_best,
+    )
+
+
+def _build_best_count_item(
+    records: List[TryRecord], db: Session
+) -> Optional[schemas.BestCountItem]:
+    """
+    FLASH/TOP レコードの中から最大 grade_id を持つ日付ごとの完登数を集計し、
+    最多完登数の日付（同数の場合は最古の日付）を返す。
+    """
+    if not records:
+        return None
+
+    max_grade_id = max(r.grade_id for r in records)
+    by_grade = [r for r in records if r.grade_id == max_grade_id]
+
+    date_count: Dict[date, int] = defaultdict(int)
+    for r in by_grade:
+        date_count[r.try_date] += 1
+
+    max_count = max(date_count.values())
+    best_date = min(d for d, c in date_count.items() if c == max_count)
+
+    grade_info = (
+        db.query(GradeInfo).filter(GradeInfo.grade_id == max_grade_id).first()
+    )
+
+    return schemas.BestCountItem(
+        grade=grade_info.grade_name,
+        grade_color=grade_info.grade_color,
+        top_count=max_count,
+        record_date=best_date,
+    )
+
+
+def get_best_count(
+    db: Session, year: int, gym_id: int
+) -> schemas.BestCountResponse:
+    """
+    年度・ジムIDを指定してベスト完登数を取得する。
+
+    season_best: 指定年度・ジムでFLASH/TOPの中で最大 grade_id を持ち、
+                 1日あたりの完登数が最多の記録。
+    personal_best: 指定ジムの全期間で同様の条件で算出した記録。
+    同一最多完登数の日付が複数存在する場合は最古の日付を選択する。
+    """
+    COMPLETED_RESULT_IDS = [1, 2]  # 1: FLASH, 2: TOP
+
+    season_records = (
+        db.query(TryRecord)
+        .filter(
+            extract("year", TryRecord.try_date) == year,
+            TryRecord.gym_id == gym_id,
+            TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
+        )
+        .all()
+    )
+
+    personal_records = (
+        db.query(TryRecord)
+        .filter(
+            TryRecord.gym_id == gym_id,
+            TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
+        )
+        .all()
+    )
+
+    return schemas.BestCountResponse(
+        season_best=_build_best_count_item(season_records, db),
+        personal_best=_build_best_count_item(personal_records, db),
     )
