@@ -139,6 +139,7 @@ async def get_area_top_rates(
 async def get_best_prob(
     year: int = Query(..., description="年度", example=2026),
     gym_id: int = Query(..., description="ジムID", example=1),
+    month: int = Query(..., description="月", example=3),
     db: Session = Depends(get_db),
 ):
     """
@@ -154,8 +155,13 @@ async def get_best_prob(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="ジムIDは1以上の値を指定してください",
         )
+    if month < 1 or month > 12:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="月は1〜12の範囲で指定してください",
+        )
     try:
-        return trylogs_crud.get_best_prob(db, year=year, gym_id=gym_id)
+        return trylogs_crud.get_best_prob(db, year=year, gym_id=gym_id, month=month)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -172,6 +178,7 @@ async def get_best_prob(
 async def get_best_count(
     year: int = Query(..., description="年度", example=2026),
     gym_id: int = Query(..., description="ジムID", example=1),
+    month: int = Query(..., description="月", example=4),
     db: Session = Depends(get_db),
 ):
     """
@@ -187,8 +194,13 @@ async def get_best_count(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="ジムIDは1以上の値を指定してください",
         )
+    if month < 1 or month > 12:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="月は1〜12の範囲で指定してください",
+        )
     try:
-        return trylogs_crud.get_best_count(db, year=year, gym_id=gym_id)
+        return trylogs_crud.get_best_count(db, year=year, gym_id=gym_id, month=month)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

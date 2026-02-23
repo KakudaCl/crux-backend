@@ -324,12 +324,12 @@ def get_area_top_rates(
 
 
 def get_best_prob(
-    db: Session, year: int, gym_id: int
+    db: Session, year: int, gym_id: int, month: int
 ) -> schemas.BestProbResponse:
     """
-    年度・ジムIDを指定してベスト完登課題を取得する。
+    年度・月・ジムIDを指定してベスト完登課題を取得する。
 
-    season_best: 指定年度・ジムでFLASH/TOPの中で最大課題番号のレコード
+    season_best: 指定年度の1月〜指定月・ジムでFLASH/TOPの中で最大課題番号のレコード
     personal_best: 指定ジムの全期間でFLASH/TOPの中で最大課題番号のレコード
     同一最大課題番号が複数存在する場合は最も古い日付のレコードを返す。
     """
@@ -340,6 +340,7 @@ def get_best_prob(
         .join(GradeInfo, TryRecord.grade_id == GradeInfo.grade_id)
         .filter(
             extract("year", TryRecord.try_date) == year,
+            extract("month", TryRecord.try_date) <= month,
             TryRecord.gym_id == gym_id,
             TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
             TryRecord.problem_number.isnot(None),
@@ -421,12 +422,12 @@ def _build_best_count_item(
 
 
 def get_best_count(
-    db: Session, year: int, gym_id: int
+    db: Session, year: int, gym_id: int, month: int
 ) -> schemas.BestCountResponse:
     """
-    年度・ジムIDを指定してベスト完登数を取得する。
+    年度・月・ジムIDを指定してベスト完登数を取得する。
 
-    season_best: 指定年度・ジムでFLASH/TOPの中で最大 grade_id を持ち、
+    season_best: 指定年度の1月〜指定月・ジムでFLASH/TOPの中で最大 grade_id を持ち、
                  1日あたりの完登数が最多の記録。
     personal_best: 指定ジムの全期間で同様の条件で算出した記録。
     同一最多完登数の日付が複数存在する場合は最古の日付を選択する。
@@ -437,6 +438,7 @@ def get_best_count(
         db.query(TryRecord)
         .filter(
             extract("year", TryRecord.try_date) == year,
+            extract("month", TryRecord.try_date) <= month,
             TryRecord.gym_id == gym_id,
             TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
         )
