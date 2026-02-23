@@ -4,7 +4,7 @@ Try Logs / Top Rates CRUD
 """
 
 from sqlalchemy.orm import Session
-from sqlalchemy import extract, and_
+from sqlalchemy import extract, and_, or_
 from typing import Dict, List, Optional
 from collections import defaultdict
 from datetime import date
@@ -330,7 +330,7 @@ def get_best_prob(
     年度・月・ジムIDを指定してベスト完登課題を取得する。
 
     season_best: 指定年度の1月〜指定月・ジムでFLASH/TOPの中で最大課題番号のレコード
-    personal_best: 指定ジムの全期間でFLASH/TOPの中で最大課題番号のレコード
+    personal_best: 指定年月以前の全期間・ジムでFLASH/TOPの中で最大課題番号のレコード
     同一最大課題番号が複数存在する場合は最も古い日付のレコードを返す。
     """
     COMPLETED_RESULT_IDS = [1, 2]  # 1: FLASH, 2: TOP
@@ -364,6 +364,13 @@ def get_best_prob(
         db.query(TryRecord)
         .join(GradeInfo, TryRecord.grade_id == GradeInfo.grade_id)
         .filter(
+            or_(
+                extract("year", TryRecord.try_date) < year,
+                and_(
+                    extract("year", TryRecord.try_date) == year,
+                    extract("month", TryRecord.try_date) <= month,
+                ),
+            ),
             TryRecord.gym_id == gym_id,
             TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
             TryRecord.problem_number.isnot(None),
@@ -429,7 +436,7 @@ def get_best_count(
 
     season_best: 指定年度の1月〜指定月・ジムでFLASH/TOPの中で最大 grade_id を持ち、
                  1日あたりの完登数が最多の記録。
-    personal_best: 指定ジムの全期間で同様の条件で算出した記録。
+    personal_best: 指定年月以前の全期間・ジムで同様の条件で算出した記録。
     同一最多完登数の日付が複数存在する場合は最古の日付を選択する。
     """
     COMPLETED_RESULT_IDS = [1, 2]  # 1: FLASH, 2: TOP
@@ -448,6 +455,13 @@ def get_best_count(
     personal_records = (
         db.query(TryRecord)
         .filter(
+            or_(
+                extract("year", TryRecord.try_date) < year,
+                and_(
+                    extract("year", TryRecord.try_date) == year,
+                    extract("month", TryRecord.try_date) <= month,
+                ),
+            ),
             TryRecord.gym_id == gym_id,
             TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
         )
