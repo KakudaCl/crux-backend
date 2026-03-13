@@ -8,7 +8,8 @@ INSERT INTO prefecture_info (prefecture_name) VALUES
 
 -- ジム情報の初期データ
 INSERT INTO gym_info (gym_name, prefecture_id) VALUES
-    ('Dボルダリングなんば', 1), ('クライミングバム大阪店', 1), ('CRUX大阪', 1);
+    ('Dボルダリングなんば', 1), ('クライミングバム大阪店', 1), ('CRUX大阪', 1),
+    ('Climbing Gym Sirius', 1);
 
 -- グレード情報の初期データ（一般的なボルダリンググレード）
 INSERT INTO grade_info (gym_id, grade_name, grade_color) VALUES
@@ -42,7 +43,18 @@ INSERT INTO grade_info (gym_id, grade_name, grade_color) VALUES
     (1, '2Q', '006400'),
     (1, '1Q', '1E90FF'),
     (1, '1D', 'FFFF00'),
-    (1, '2D', '000000');
+    (1, '2D', '000000'),
+    (4, '8Q', 'FF99FF'),
+    (4, '7Q', '006400'),
+    (4, '6Q', 'FFD700'),
+    (4, '5Q', 'E2041B'),
+    (4, '4Q', '192F60'),
+    (4, '3Q', 'C0C6C9'),
+    (4, '2Q', '89C3EB'),
+    (4, '1Q', 'F08300'),
+    (4, '1D', '6C3524'),
+    (4, '2D', 'ADFF2F'),
+    (4, '3D', '000000');
 
 -- トライ結果情報の初期データ
 INSERT INTO result_info (result_name) VALUES
@@ -73,7 +85,11 @@ INSERT INTO area_info (gym_id, area_name) VALUES
     (1, 'KASAGI'),
     (1, 'HOURAI'),
     (1, 'HIEI'),
-    (1, 'COMPETITION');
+    (1, 'COMPETITION'),
+    (4, 'スラブ&95°'),
+    (4, '90°&110°'),
+    (4, '120°'),
+    (4, '135°');
 
 INSERT INTO try_record (gym_id, problem_number, area_id, grade_id, result_id, try_date, day_count, monthly_info, remarks) VALUES
     -- 2025年1月記録 BMO
@@ -383,7 +399,35 @@ INSERT INTO try_record (gym_id, problem_number, area_id, grade_id, result_id, tr
     (1, null, 15, 27, 2, '2026-02-14', 1, null, '3Q二完登 ヒールスタートがきつい'),
     (1, null, 19, 27, 4, '2026-02-14', 1, null, null),
     (1, null, 20, 27, 4, '2026-02-14', 1, null, null),
-    (1, null, 20, 28, 4, '2026-02-14', 1, null, '2Q初トライ');
+    (1, null, 20, 28, 4, '2026-02-14', 1, null, '2Q初トライ'),
+
+    -- 2026年3月記録 Serius
+    (4, null, 21, 32, 1, '2026-03-13', 1, null, '★腰痛が治りかけの状態でアニ休使って久々の遠征'),
+    (4, null, 21, 32, 1, '2026-03-13', 1, null, null),
+    (4, null, 21, 32, 1, '2026-03-13', 1, null, null),
+    (4, null, 22, 32, 1, '2026-03-13', 1, null, null),
+    (4, null, 21, 33, 1, '2026-03-13', 1, null, null),
+    (4, null, 21, 33, 1, '2026-03-13', 1, null, null),
+    (4, null, 21, 33, 1, '2026-03-13', 1, null, null),
+    (4, null, 21, 33, 1, '2026-03-13', 1, null, null),
+    (4, null, 22, 33, 1, '2026-03-13', 1, null, null),
+    (4, null, 22, 33, 1, '2026-03-13', 1, null, null),
+    (4, null, 21, 34, 1, '2026-03-13', 1, null, null),
+    (4, null, 21, 34, 1, '2026-03-13', 1, null, null),
+    (4, null, 21, 34, 1, '2026-03-13', 1, null, null),
+    (4, null, 22, 34, 1, '2026-03-13', 1, null, null),
+    (4, null, 22, 34, 1, '2026-03-13', 1, null, null),
+    (4, null, 22, 34, 1, '2026-03-13', 1, null, null),
+    (4, null, 23, 34, 1, '2026-03-13', 1, null, null),
+    (4, null, 23, 34, 1, '2026-03-13', 1, null, null),
+    (4, null, 21, 35, 4, '2026-03-13', 1, null, 'ヒールフック改善の余地あり'),
+    (4, null, 21, 35, 3, '2026-03-13', 1, null, '紫のピンチ力課題'),
+    (4, null, 22, 35, 4, '2026-03-13', 1, null, 'アートでデュアルなスローパーから進めず'),
+    (4, null, 22, 35, 2, '2026-03-13', 1, null, '最初に完登した5Q'),
+    (4, null, 23, 35, 3, '2026-03-13', 1, null, 'ジムの人曰くかなりムズイ'),
+    (4, null, 23, 35, 1, '2026-03-13', 1, null, null),
+    (4, null, 24, 35, 1, '2026-03-13', 1, null, '一番簡単に感じた強傾斜。2回完登。'),
+    (4, null, 21, 36, 3, '2026-03-13', 1, null, '完登手前で怪我もありビビってしまった');
 
 -- 初期データ投入完了メッセージ
 DO $$
