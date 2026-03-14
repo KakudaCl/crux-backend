@@ -248,6 +248,7 @@ GET http://localhost:8000/health
 **エンドポイント**: `GET /top_rates`
 
 **クエリパラメータ**:
+
 - `year` (integer, 必須): 年度（例: 2026）
 - `gym_id` (integer, 必須): ジムID（例: 1）
 
@@ -300,6 +301,7 @@ http GET "http://localhost:8000/top_rates" year==2026 gym_id==1
 ```
 
 **レスポンスフィールド**:
+
 - `result_info`: グレード別の完登率情報配列
   - `grade`: グレード名（例: "3級"）
   - `monthly_info`: 月別情報配列
@@ -319,6 +321,7 @@ http GET "http://localhost:8000/top_rates" year==2026 gym_id==1
     - `top_count`: 完登数
 
 **エラーレスポンス**:
+
 - `400 Bad Request`: パラメータが不正な場合
 - `500 Internal Server Error`: サーバー内部エラー
 
@@ -424,13 +427,13 @@ mypy app/
 
 ## 📝 環境変数
 
-| 変数名 | 説明 | デフォルト値 |
-|--------|------|-------------|
-| `DATABASE_URL` | PostgreSQL接続URL | `postgresql://crux_user:crux_password@localhost:5432/crux_db` |
-| `APP_NAME` | アプリケーション名 | `"CRUX Backend API"` |
-| `APP_VERSION` | アプリケーションバージョン | `"0.1.0"` |
-| `DEBUG` | デバッグモード | `True` |
-| `ALLOWED_ORIGINS` | CORS許可オリジン | `["http://localhost:3000", "http://localhost:8080"]` |
+| 変数名            | 説明                       | デフォルト値                                                  |
+| ----------------- | -------------------------- | ------------------------------------------------------------- |
+| `DATABASE_URL`    | PostgreSQL接続URL          | `postgresql://crux_user:crux_password@localhost:5432/crux_db` |
+| `APP_NAME`        | アプリケーション名         | `"CRUX Backend API"`                                          |
+| `APP_VERSION`     | アプリケーションバージョン | `"0.1.0"`                                                     |
+| `DEBUG`           | デバッグモード             | `True`                                                        |
+| `ALLOWED_ORIGINS` | CORS許可オリジン           | `["http://localhost:3000", "http://localhost:8080"]`          |
 
 ## 🧪 テスト
 
