@@ -1,5 +1,6 @@
-# Python 3.11 のスリムイメージを使用
-FROM python:3.11-slim
+# ベースイメージ（AWS ECR デフォルト / ローカルは docker-compose の build.args で上書き）
+ARG PYTHON_IMAGE=public.ecr.aws/docker/library/python:3.11-slim
+FROM ${PYTHON_IMAGE}
 
 # 作業ディレクトリの設定
 WORKDIR /app
@@ -10,12 +11,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1
 
-# システムパッケージの更新とPostgreSQL クライアントのインストール
+# システムパッケージの更新とPostgreSQL クライアント・curl（ヘルスチェック用）のインストール
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     postgresql-client \
     gcc \
     python3-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # 依存関係ファイルのコピー

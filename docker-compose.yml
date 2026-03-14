@@ -1,9 +1,11 @@
+# ローカル: そのまま docker-compose up で Docker Hub のイメージを使用
+# AWS: 環境変数 POSTGRES_IMAGE, および api の build.args を省略すると ECR 公開イメージを使用
 version: '3.8'
 
 services:
   # PostgreSQL データベース
   postgres:
-    image: postgres:16-alpine
+    image: ${POSTGRES_IMAGE:-postgres:16-alpine}
     container_name: crux_postgres
     restart: unless-stopped
     environment:
@@ -29,6 +31,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        # ローカル用: Docker Hub のイメージを指定（AWS では未指定で Dockerfile の ECR デフォルトを使用）
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.11-slim}
     container_name: crux_api
     restart: unless-stopped
     environment:
@@ -57,6 +62,9 @@ services:
       start_period: 40s
     networks:
       - crux_network
+    # ローカルでホストのサービスへアクセスするため（Linux でも host.docker.internal を使用可能に）
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command: >
       sh -c "
         echo 'Waiting for database...' &&
