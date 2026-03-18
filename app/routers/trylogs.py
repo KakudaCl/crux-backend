@@ -3,7 +3,7 @@ Try Logs / Top Rates Router
 トライログ・完登率取得APIのルーター定義
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, Body
 from sqlalchemy.orm import Session
 
 from app import schemas
@@ -11,6 +11,40 @@ from app.database import get_db
 from app.cruds import trylogs as trylogs_crud
 
 router = APIRouter()
+
+
+@router.post(
+    "/trylog/register",
+    summary="トライログ登録",
+    status_code=status.HTTP_200_OK,
+)
+async def register_trylog(
+    request: schemas.TryLogRegisterRequest = Body(...),
+    db: Session = Depends(get_db),
+):
+    """
+    トライログ情報を登録、更新する。
+
+    trylog_list の各アイテムを try_record テーブルに登録する。
+    try_date・gym_id・prob_no が一致するレコードが既に存在する場合は上書き更新する。
+    """
+    if not request.trylog_list:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="trylog_list は1件以上指定してください",
+        )
+    if request.gym_id < 1:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="ジムIDは1以上の値を指定してください",
+        )
+    try:
+        trylogs_crud.register_trylog(db, request=request)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"内部処理エラーが発生しました: {str(e)}",
+        )
 
 
 @router.get(

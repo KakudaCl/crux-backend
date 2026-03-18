@@ -17,6 +17,8 @@ from app.schemas.trylogs import (
     BestProbResponse,
     BestCountItem,
     BestCountResponse,
+    TryLogRegisterItem,
+    TryLogRegisterRequest,
 )
 from app.schemas.gyms import GymInfo, GymsNameResponse
 
@@ -38,6 +40,9 @@ __all__ = [
     # best count schemas
     "BestCountItem",
     "BestCountResponse",
+    # trylog register schemas
+    "TryLogRegisterItem",
+    "TryLogRegisterRequest",
     # gyms schemas
     "GymInfo",
     "GymsNameResponse",
