@@ -22,6 +22,7 @@ from app.schemas.trylogs import (
 )
 from app.schemas.gyms import GymInfo, GymsNameResponse
 from app.schemas.grades import GradeInfo, GradesNameResponse
+from app.schemas.areas import AreaNameItem, AreasNameResponse
 
 __all__ = [
     # trylog schemas
@@ -50,4 +51,7 @@ __all__ = [
     # grades schemas
     "GradeInfo",
     "GradesNameResponse",
+    # areas schemas
+    "AreaNameItem",
+    "AreasNameResponse",
 ]
