@@ -17,6 +17,51 @@ from app.models.area_info import AreaInfo
 from app.models.area_info import AreaInfo as AreaInfoModel
 
 
+def register_trylog(
+    db: Session, request: schemas.TryLogRegisterRequest
+) -> None:
+    """
+    トライログを登録・更新する。
+
+    trylog_list の各アイテムに対して、try_date・gym_id・prob_no が一致する
+    既存レコードがあれば上書き更新し、なければ新規登録する。
+    prob_no が null の場合は常に新規登録する。
+    """
+    for item in request.trylog_list:
+        existing = None
+        if item.prob_no is not None:
+            existing = (
+                db.query(TryRecord)
+                .filter(
+                    TryRecord.try_date == request.try_date,
+                    TryRecord.gym_id == request.gym_id,
+                    TryRecord.problem_number == item.prob_no,
+                )
+                .first()
+            )
+
+        if existing:
+            existing.grade_id = item.grade_id
+            existing.result_id = item.result_id
+            existing.area_id = item.area_id
+            existing.day_count = item.day_count
+            existing.remarks = item.remarks
+        else:
+            new_record = TryRecord(
+                gym_id=request.gym_id,
+                try_date=request.try_date,
+                problem_number=item.prob_no,
+                grade_id=item.grade_id,
+                result_id=item.result_id,
+                area_id=item.area_id,
+                day_count=item.day_count,
+                remarks=item.remarks,
+            )
+            db.add(new_record)
+
+    db.commit()
+
+
 def get_trylogs(
     db: Session, year: int, month: int, gym_id: int
 ) -> schemas.TryLogResponse:

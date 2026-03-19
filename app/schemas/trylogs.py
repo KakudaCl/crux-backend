@@ -192,3 +192,34 @@ class BestCountResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class TryLogRegisterItem(BaseModel):
+    """
+    トライログ登録リクエストの個別項目スキーマ
+    """
+
+    prob_no: Optional[int] = Field(None, description="課題番号", example=3)
+    grade_id: int = Field(..., description="グレードID", example=14)
+    result_id: int = Field(..., description="リザルトID", example=3)
+    area_id: Optional[int] = Field(None, description="エリアID", example=11)
+    day_count: Optional[int] = Field(None, description="トライ日数", example=1)
+    remarks: Optional[str] = Field(None, description="備考")
+
+    class Config:
+        from_attributes = True
+
+
+class TryLogRegisterRequest(BaseModel):
+    """
+    トライログ登録APIのリクエストボディスキーマ
+    """
+
+    gym_id: int = Field(..., description="ジムID", example=1)
+    try_date: date = Field(..., description="トライ日", example="2025-04-28")
+    trylog_list: List[TryLogRegisterItem] = Field(
+        ..., description="トライログリスト"
+    )
+
+    class Config:
+        from_attributes = True
