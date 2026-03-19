@@ -21,6 +21,7 @@ from app.schemas.trylogs import (
     TryLogRegisterRequest,
 )
 from app.schemas.gyms import GymInfo, GymsNameResponse
+from app.schemas.grades import GradeInfo, GradesNameResponse
 
 __all__ = [
     # trylog schemas
@@ -46,4 +47,7 @@ __all__ = [
     # gyms schemas
     "GymInfo",
     "GymsNameResponse",
+    # grades schemas
+    "GradeInfo",
+    "GradesNameResponse",
 ]

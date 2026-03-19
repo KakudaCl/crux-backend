@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 import os
 
 from app.database import get_db, engine
-from app.routers import trylogs, gyms
+from app.routers import trylogs, gyms, grades
 
 # 環境変数の読み込み
 APP_NAME = os.getenv("APP_NAME", "CRUX Backend API")
@@ -36,6 +36,7 @@ app.add_middleware(
 
 # APIルーターの登録
 app.include_router(gyms.router, prefix="/api", tags=["共通"])
+app.include_router(grades.router, prefix="/api", tags=["共通"])
 app.include_router(trylogs.router, prefix="/api", tags=["トライログ"])
 
 
