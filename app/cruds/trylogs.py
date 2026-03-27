@@ -17,9 +17,22 @@ from app.models.area_info import AreaInfo
 from app.models.area_info import AreaInfo as AreaInfoModel
 
 
-def register_trylog(
-    db: Session, request: schemas.TryLogRegisterRequest
-) -> None:
+def get_years(db: Session) -> schemas.YearsResponse:
+    """
+    トライ記録テーブルからデータが存在する年度を一通り取得する。
+    """
+    year_records = (
+        db.query(extract("year", TryRecord.try_date))
+        .distinct()
+        .order_by(extract("year", TryRecord.try_date))
+        .all()
+    )
+
+    years = [int(year) for (year,) in year_records]
+    return schemas.YearsResponse(years=years)
+
+
+def register_trylog(db: Session, request: schemas.TryLogRegisterRequest) -> None:
     """
     トライログを登録・更新する。
 
@@ -461,9 +474,7 @@ def _build_best_count_item(
     max_count = max(date_count.values())
     best_date = min(d for d, c in date_count.items() if c == max_count)
 
-    grade_info = (
-        db.query(GradeInfo).filter(GradeInfo.grade_id == max_grade_id).first()
-    )
+    grade_info = db.query(GradeInfo).filter(GradeInfo.grade_id == max_grade_id).first()
 
     return schemas.BestCountItem(
         grade=grade_info.grade_name,

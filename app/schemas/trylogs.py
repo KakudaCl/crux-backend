@@ -47,6 +47,17 @@ class TryLogResponse(BaseModel):
         from_attributes = True
 
 
+class YearsResponse(BaseModel):
+    """
+    年度取得APIのレスポンススキーマ
+    """
+
+    years: List[int] = Field(..., description="データが存在する年度一覧")
+
+    class Config:
+        from_attributes = True
+
+
 class MonthlyInfo(BaseModel):
     """
     月別情報スキーマ

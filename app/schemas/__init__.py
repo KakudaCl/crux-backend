@@ -7,6 +7,7 @@ from app.schemas.trylogs import (
     TryLogItem,
     DailyTryLog,
     TryLogResponse,
+    YearsResponse,
     MonthlyInfo,
     GradeTopRate,
     TopRateResponse,
@@ -30,6 +31,7 @@ __all__ = [
     "TryLogItem",
     "DailyTryLog",
     "TryLogResponse",
+    "YearsResponse",
     # top_rate schemas
     "MonthlyInfo",
     "GradeTopRate",
