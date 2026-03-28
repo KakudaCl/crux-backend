@@ -6,6 +6,7 @@ services:
   # PostgreSQL データベース
   postgres:
     image: ${POSTGRES_IMAGE:-postgres:16-alpine}
+    command: ["postgres", "-c", "timezone=Asia/Tokyo"]
     container_name: crux_postgres
     restart: unless-stopped
     environment:

@@ -13,6 +13,27 @@ from app.cruds import trylogs as trylogs_crud
 router = APIRouter()
 
 
+@router.get(
+    "/trylog/year",
+    summary="年度取得",
+    response_model=schemas.YearsResponse,
+    status_code=status.HTTP_200_OK,
+)
+async def get_years(
+    db: Session = Depends(get_db),
+):
+    """
+    データが存在する年度を一通り取得する
+    """
+    try:
+        return trylogs_crud.get_years(db)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"内部処理エラーが発生しました: {str(e)}",
+        )
+
+
 @router.post(
     "/trylog/register",
     summary="トライログ登録",
