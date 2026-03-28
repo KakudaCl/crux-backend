@@ -92,7 +92,7 @@ def get_trylogs(
             extract("month", TryRecord.try_date) == month,
             TryRecord.gym_id == gym_id,
         )
-        .order_by(TryRecord.try_date, TryRecord.try_id)
+        .order_by(TryRecord.problem_number, TryRecord.try_id)
         .all()
     )
 
