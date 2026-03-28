@@ -34,7 +34,11 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_set_try_record_updated_at
-BEFORE UPDATE ON try_record
+BEFORE UPDATE OF
+    result_id,
+    day_count,
+    remarks
+ON try_record
 FOR EACH ROW
 EXECUTE FUNCTION set_try_record_updated_at();
 
