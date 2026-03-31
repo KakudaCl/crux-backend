@@ -76,11 +76,19 @@ def register_trylog(db: Session, request: schemas.TryLogRegisterRequest) -> None
 
 
 def get_trylogs(
-    db: Session, year: int, month: int, gym_id: int
+    db: Session, year: int, month: int, gym_id: int, sort: str = "prob_no"
 ) -> schemas.TryLogResponse:
     """
     年度・月・ジムIDを指定してトライログ情報を取得する。
+
+    sort='prob_no': 日付グループ内を課題番号昇順でソート
+    sort='time':    日付グループ内を登録日時(created_at)昇順でソート
     """
+    if sort == "time":
+        order_columns = [TryRecord.created_at.asc(), TryRecord.try_id.asc()]
+    else:
+        order_columns = [TryRecord.problem_number.asc(), TryRecord.try_id.asc()]
+
     # 指定された年度・月・ジムIDに一致するトライ記録を取得
     try_records = (
         db.query(TryRecord)
@@ -92,14 +100,14 @@ def get_trylogs(
             extract("month", TryRecord.try_date) == month,
             TryRecord.gym_id == gym_id,
         )
-        .order_by(TryRecord.problem_number, TryRecord.try_id)
+        .order_by(*order_columns)
         .all()
     )
 
     if not try_records:
         return schemas.TryLogResponse(all_logs=[])
 
-    # try_date ごとにレコードをグルーピング
+    # try_date ごとにレコードをグルーピング（挿入順を保持するため OrderedDict 的に扱う）
     date_grouped: defaultdict[date, List[TryRecord]] = defaultdict(list)
     for record in try_records:
         date_grouped[record.try_date].append(record)

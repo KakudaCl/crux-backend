@@ -3,7 +3,7 @@ Try Record Model
 トライ記録テーブルのモデル定義
 """
 
-from sqlalchemy import Column, BigInteger, Integer, Date, String, ForeignKey
+from sqlalchemy import Column, BigInteger, Integer, Date, String, ForeignKey, TIMESTAMP
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
@@ -50,6 +50,8 @@ class TryRecord(Base):
         String(20), nullable=True, default=None, comment="マンスリー情報"
     )
     remarks = Column(String(30), nullable=True, default=None, comment="備考")
+    created_at = Column(TIMESTAMP, nullable=False, comment="作成日時")
+    updated_at = Column(TIMESTAMP, nullable=False, comment="更新日時")
 
     # リレーションシップ
     gym = relationship("GymInfo", back_populates="try_records")
