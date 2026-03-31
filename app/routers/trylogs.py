@@ -82,7 +82,7 @@ async def get_trylogs(
     month: int = Query(..., description="月", example=3),
     gym_id: int = Query(..., description="ジムID", example=1),
     sort: str = Query(
-        ...,
+        "prob_no",
         description="ソート順（'prob_no': 課題番号昇順 / 'time': 登録日時昇順）",
         example="prob_no",
     ),
@@ -114,7 +114,9 @@ async def get_trylogs(
         )
 
     try:
-        return trylogs_crud.get_trylogs(db, year=year, month=month, gym_id=gym_id, sort=sort)
+        return trylogs_crud.get_trylogs(
+            db, year=year, month=month, gym_id=gym_id, sort=sort
+        )
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
