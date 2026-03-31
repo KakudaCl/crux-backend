@@ -68,6 +68,9 @@ async def register_trylog(
         )
 
 
+VALID_SORT_VALUES = {"prob_no", "time"}
+
+
 @router.get(
     "/trylog/list",
     summary="トライログ取得",
@@ -78,6 +81,11 @@ async def get_trylogs(
     year: int = Query(..., description="年度", example=2026),
     month: int = Query(..., description="月", example=3),
     gym_id: int = Query(..., description="ジムID", example=1),
+    sort: str = Query(
+        ...,
+        description="ソート順（'prob_no': 課題番号昇順 / 'time': 登録日時昇順）",
+        example="prob_no",
+    ),
     db: Session = Depends(get_db),
 ):
     """
@@ -99,9 +107,14 @@ async def get_trylogs(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="ジムIDは1以上の値を指定してください",
         )
+    if sort not in VALID_SORT_VALUES:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="sortは 'prob_no'（課題番号昇順）または 'time'（登録日時昇順）を指定してください",
+        )
 
     try:
-        return trylogs_crud.get_trylogs(db, year=year, month=month, gym_id=gym_id)
+        return trylogs_crud.get_trylogs(db, year=year, month=month, gym_id=gym_id, sort=sort)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
