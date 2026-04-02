@@ -21,8 +21,10 @@ CREATE TABLE IF NOT EXISTS try_record (
     "day_count" INTEGER DEFAULT NULL,
     "monthly_info" VARCHAR(20) DEFAULT NULL,
     "remarks" VARCHAR(30) DEFAULT NULL,
+    "is_deleted" INTEGER DEFAULT 0,
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "deleted_at" TIMESTAMP DEFAULT NULL
 );
 
 CREATE OR REPLACE FUNCTION set_try_record_updated_at()
@@ -53,5 +55,7 @@ COMMENT ON COLUMN try_record."try_date" IS 'トライ日';
 COMMENT ON COLUMN try_record."day_count" IS 'トライ日数';
 COMMENT ON COLUMN try_record."monthly_info" IS 'マンスリー情報';
 COMMENT ON COLUMN try_record."remarks" IS '備考';
+COMMENT ON COLUMN try_record."is_deleted" IS '削除フラグ';
 COMMENT ON COLUMN try_record."created_at" IS '作成日時';
 COMMENT ON COLUMN try_record."updated_at" IS '更新日時';
+COMMENT ON COLUMN try_record."deleted_at" IS '削除日時';
