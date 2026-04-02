@@ -46,9 +46,6 @@ class TryRecord(Base):
     )
     try_date = Column(Date, nullable=True, default=None, comment="トライ日")
     day_count = Column(Integer, nullable=True, default=None, comment="トライ日数")
-    monthly_info = Column(
-        String(20), nullable=True, default=None, comment="マンスリー情報"
-    )
     remarks = Column(String(30), nullable=True, default=None, comment="備考")
     created_at = Column(TIMESTAMP, nullable=False, comment="作成日時")
     updated_at = Column(TIMESTAMP, nullable=False, comment="更新日時")
