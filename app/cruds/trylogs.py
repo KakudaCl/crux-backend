@@ -160,6 +160,7 @@ def get_trylogs(
                     day_count=record.day_count,
                     remarks=record.remarks,
                     grade_color=grade_color,
+                    try_id=record.try_id,
                 )
             )
 

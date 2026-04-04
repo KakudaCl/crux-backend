@@ -19,6 +19,7 @@ class TryLogItem(BaseModel):
     day_count: Optional[int] = Field(None, description="トライ日数")
     remarks: Optional[str] = Field(None, description="備考")
     grade_color: Optional[str] = Field(None, description="グレード色（カラーコード）")
+    try_id: int = Field(..., description="トライID")
 
     class Config:
         from_attributes = True
