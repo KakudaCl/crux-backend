@@ -68,6 +68,39 @@ async def register_trylog(
         )
 
 
+@router.post(
+    "/trylog/delete",
+    summary="トライログ削除",
+    status_code=status.HTTP_200_OK,
+)
+async def delete_trylog(
+    try_id: int = Query(..., description="トライID", example=341),
+    db: Session = Depends(get_db),
+):
+    """
+    指定されたトライIDのトライログ情報を論理削除する。
+    """
+    if try_id < 1:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="トライIDは1以上の値を指定してください",
+        )
+    try:
+        result = trylogs_crud.delete_trylog(db, try_id=try_id)
+        if result is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"指定されたトライID（{try_id}）のレコードが存在しません",
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"内部処理エラーが発生しました: {str(e)}",
+        )
+
+
 VALID_SORT_VALUES = {"prob_no", "time"}
 
 

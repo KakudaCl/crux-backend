@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import extract, and_, or_
 from typing import Dict, List, Optional
 from collections import defaultdict
-from datetime import date
+from datetime import date, datetime
 
 from app import schemas
 from app.models.try_record import TryRecord
@@ -15,6 +15,23 @@ from app.models.grade_info import GradeInfo
 from app.models.result_info import ResultInfo
 from app.models.area_info import AreaInfo
 from app.models.area_info import AreaInfo as AreaInfoModel
+
+
+def delete_trylog(db: Session, try_id: int) -> None:
+    """
+    指定されたトライIDのトライ記録を論理削除する。
+
+    is_deleted を 1 に設定し、deleted_at に現在時刻を格納する。
+    対象レコードが存在しない場合は None を返す。
+    """
+    record = db.query(TryRecord).filter(TryRecord.try_id == try_id).first()
+    if record is None:
+        return None
+
+    record.is_deleted = 1
+    record.deleted_at = datetime.now()
+    db.commit()
+    return record
 
 
 def get_years(db: Session) -> schemas.YearsResponse:
@@ -99,6 +116,7 @@ def get_trylogs(
             extract("year", TryRecord.try_date) == year,
             extract("month", TryRecord.try_date) == month,
             TryRecord.gym_id == gym_id,
+            TryRecord.is_deleted == 0,
         )
         .order_by(*order_columns)
         .all()
@@ -142,6 +160,7 @@ def get_trylogs(
                     day_count=record.day_count,
                     remarks=record.remarks,
                     grade_color=grade_color,
+                    try_id=record.try_id,
                 )
             )
 
@@ -168,6 +187,7 @@ def get_monthly_top_rates(
         .filter(
             extract("year", TryRecord.try_date) == year,
             TryRecord.gym_id == gym_id,
+            TryRecord.is_deleted == 0,
         )
         .all()
     )
@@ -306,6 +326,7 @@ def get_area_top_rates(
                 extract("year", TryRecord.try_date) == year,
                 extract("month", TryRecord.try_date).in_(month_range),
                 TryRecord.gym_id == gym_id,
+                TryRecord.is_deleted == 0,
             )
         )
         .all()
@@ -410,6 +431,7 @@ def get_best_prob(
             TryRecord.gym_id == gym_id,
             TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
             TryRecord.problem_number.isnot(None),
+            TryRecord.is_deleted == 0,
         )
         .order_by(TryRecord.problem_number.desc(), TryRecord.try_date.asc())
         .first()
@@ -440,6 +462,7 @@ def get_best_prob(
             TryRecord.gym_id == gym_id,
             TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
             TryRecord.problem_number.isnot(None),
+            TryRecord.is_deleted == 0,
         )
         .order_by(TryRecord.problem_number.desc(), TryRecord.try_date.asc())
         .first()
@@ -512,6 +535,7 @@ def get_best_count(
             extract("month", TryRecord.try_date) <= month,
             TryRecord.gym_id == gym_id,
             TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
+            TryRecord.is_deleted == 0,
         )
         .all()
     )
@@ -528,6 +552,7 @@ def get_best_count(
             ),
             TryRecord.gym_id == gym_id,
             TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
+            TryRecord.is_deleted == 0,
         )
         .all()
     )
