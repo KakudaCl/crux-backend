@@ -462,6 +462,7 @@ def get_best_prob(
             TryRecord.gym_id == gym_id,
             TryRecord.result_id.in_(COMPLETED_RESULT_IDS),
             TryRecord.problem_number.isnot(None),
+            TryRecord.is_deleted == 0,
         )
         .order_by(TryRecord.problem_number.desc(), TryRecord.try_date.asc())
         .first()
