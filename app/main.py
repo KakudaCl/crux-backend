@@ -3,13 +3,17 @@ FastAPI Application Entry Point
 CRUX Backend APIのメインアプリケーション
 """
 
-from fastapi import FastAPI, Depends
+from typing import Annotated
+
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import os
 
 from app.database import get_db, engine
 from app.routers import trylogs, gyms, grades, areas, results
+
+DbDep = Annotated[Session, Depends(get_db)]
 
 # 環境変数の読み込み
 APP_NAME = os.getenv("APP_NAME", "CRUX Backend API")
@@ -35,11 +39,11 @@ app.add_middleware(
 )
 
 # APIルーターの登録
-app.include_router(gyms.router, prefix="/api", tags=["共通"])
-app.include_router(grades.router, prefix="/api", tags=["共通"])
-app.include_router(areas.router, prefix="/api", tags=["共通"])
-app.include_router(results.router, prefix="/api", tags=["共通"])
-app.include_router(trylogs.router, prefix="/api", tags=["トライログ"])
+app.include_router(gyms.router)
+app.include_router(grades.router)
+app.include_router(areas.router)
+app.include_router(results.router)
+app.include_router(trylogs.router)
 
 
 @app.on_event("startup")
@@ -84,7 +88,7 @@ async def root():
 
 
 @app.get("/health")
-async def health_check(db: Session = Depends(get_db)):
+def health_check(db: DbDep):
     """
     ヘルスチェックエンドポイント
     アプリケーションとデータベースの状態を確認
