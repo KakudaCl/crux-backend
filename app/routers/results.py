@@ -3,6 +3,8 @@ Results Router
 トライ結果名取得APIのルーター定義
 """
 
+from typing import Annotated
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
@@ -10,7 +12,9 @@ from app import schemas
 from app.database import get_db
 from app.cruds import results as results_crud
 
-router = APIRouter()
+router = APIRouter(prefix="/api", tags=["共通"])
+
+DbDep = Annotated[Session, Depends(get_db)]
 
 
 @router.get(
@@ -19,8 +23,8 @@ router = APIRouter()
     response_model=schemas.ResultsNameResponse,
     status_code=status.HTTP_200_OK,
 )
-async def get_results_name(
-    db: Session = Depends(get_db),
+def get_results_name(
+    db: DbDep,
 ):
     """
     トライ結果名を一通り取得する

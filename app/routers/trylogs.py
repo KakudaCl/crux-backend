@@ -3,14 +3,18 @@ Try Logs / Top Rates Router
 トライログ・完登率取得APIのルーター定義
 """
 
-from fastapi import APIRouter, Depends, HTTPException, status, Query, Body
+from typing import Annotated
+
+from fastapi import APIRouter, Body, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from app import schemas
 from app.database import get_db
 from app.cruds import trylogs as trylogs_crud
 
-router = APIRouter()
+router = APIRouter(prefix="/api", tags=["トライログ"])
+
+DbDep = Annotated[Session, Depends(get_db)]
 
 
 @router.get(
@@ -19,8 +23,8 @@ router = APIRouter()
     response_model=schemas.YearsResponse,
     status_code=status.HTTP_200_OK,
 )
-async def get_years(
-    db: Session = Depends(get_db),
+def get_years(
+    db: DbDep,
 ):
     """
     データが存在する年度を一通り取得する
@@ -39,9 +43,9 @@ async def get_years(
     summary="トライログ登録",
     status_code=status.HTTP_200_OK,
 )
-async def register_trylog(
-    request: schemas.TryLogRegisterRequest = Body(...),
-    db: Session = Depends(get_db),
+def register_trylog(
+    request: Annotated[schemas.TryLogRegisterRequest, Body()],
+    db: DbDep,
 ):
     """
     トライログ情報を登録、更新する。
@@ -73,9 +77,9 @@ async def register_trylog(
     summary="トライログ削除",
     status_code=status.HTTP_200_OK,
 )
-async def delete_trylog(
-    try_id: int = Query(..., description="トライID", example=341),
-    db: Session = Depends(get_db),
+def delete_trylog(
+    try_id: Annotated[int, Query(description="トライID", example=341)],
+    db: DbDep,
 ):
     """
     指定されたトライIDのトライログ情報を論理削除する。
@@ -110,16 +114,18 @@ VALID_SORT_VALUES = {"prob_no", "time"}
     response_model=schemas.TryLogResponse,
     status_code=status.HTTP_200_OK,
 )
-async def get_trylogs(
-    year: int = Query(..., description="年度", example=2026),
-    month: int = Query(..., description="月", example=3),
-    gym_id: int = Query(..., description="ジムID", example=1),
-    sort: str = Query(
-        "prob_no",
-        description="ソート順（'prob_no': 課題番号昇順 / 'time': 登録日時昇順）",
-        example="prob_no",
-    ),
-    db: Session = Depends(get_db),
+def get_trylogs(
+    year: Annotated[int, Query(description="年度", example=2026)],
+    month: Annotated[int, Query(description="月", example=3)],
+    gym_id: Annotated[int, Query(description="ジムID", example=1)],
+    db: DbDep,
+    sort: Annotated[
+        str,
+        Query(
+            description="ソート順（'prob_no': 課題番号昇順 / 'time': 登録日時昇順）",
+            example="prob_no",
+        ),
+    ] = "prob_no",
 ):
     """
     年度/ジム/月別のトライログ情報を取得する
@@ -163,10 +169,10 @@ async def get_trylogs(
     response_model=schemas.TopRateResponse,
     status_code=status.HTTP_200_OK,
 )
-async def get_monthly_top_rates(
-    year: int = Query(..., description="年度", example=2026),
-    gym_id: int = Query(..., description="ジムID", example=1),
-    db: Session = Depends(get_db),
+def get_monthly_top_rates(
+    year: Annotated[int, Query(description="年度", example=2026)],
+    gym_id: Annotated[int, Query(description="ジムID", example=1)],
+    db: DbDep,
 ):
     """
     年度/ジム/グレード別の完登率情報を取得する
@@ -196,13 +202,13 @@ async def get_monthly_top_rates(
     response_model=schemas.AreaTopRateResponse,
     status_code=status.HTTP_200_OK,
 )
-async def get_area_top_rates(
-    year: int = Query(..., description="年度", example=2026),
-    period: int = Query(
-        ..., description="期間（1:上半期、2:下半期、3:年間）", example=3
-    ),
-    gym_id: int = Query(..., description="ジムID", example=1),
-    db: Session = Depends(get_db),
+def get_area_top_rates(
+    year: Annotated[int, Query(description="年度", example=2026)],
+    period: Annotated[
+        int, Query(description="期間（1:上半期、2:下半期、3:年間）", example=3)
+    ],
+    gym_id: Annotated[int, Query(description="ジムID", example=1)],
+    db: DbDep,
 ):
     """
     年度/ジム/グレード別の完登率情報(エリア別)を取得する
@@ -239,11 +245,11 @@ async def get_area_top_rates(
     response_model=schemas.BestProbResponse,
     status_code=status.HTTP_200_OK,
 )
-async def get_best_prob(
-    year: int = Query(..., description="年度", example=2026),
-    gym_id: int = Query(..., description="ジムID", example=1),
-    month: int = Query(..., description="月", example=3),
-    db: Session = Depends(get_db),
+def get_best_prob(
+    year: Annotated[int, Query(description="年度", example=2026)],
+    gym_id: Annotated[int, Query(description="ジムID", example=1)],
+    month: Annotated[int, Query(description="月", example=3)],
+    db: DbDep,
 ):
     """
     完登課題のベスト記録（シーズンベスト・パーソナルベスト）を取得する
@@ -278,11 +284,11 @@ async def get_best_prob(
     response_model=schemas.BestCountResponse,
     status_code=status.HTTP_200_OK,
 )
-async def get_best_count(
-    year: int = Query(..., description="年度", example=2026),
-    gym_id: int = Query(..., description="ジムID", example=1),
-    month: int = Query(..., description="月", example=4),
-    db: Session = Depends(get_db),
+def get_best_count(
+    year: Annotated[int, Query(description="年度", example=2026)],
+    gym_id: Annotated[int, Query(description="ジムID", example=1)],
+    month: Annotated[int, Query(description="月", example=4)],
+    db: DbDep,
 ):
     """
     完登数のベスト記録（シーズンベスト・パーソナルベスト）を取得する
