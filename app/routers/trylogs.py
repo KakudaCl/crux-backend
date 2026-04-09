@@ -151,8 +151,8 @@ def get_monthly_top_rates(
 def get_area_top_rates(
     year: Annotated[int, Query(ge=2000, le=2100, description="年度", example=2026)],
     period: Annotated[
-        Literal[1, 2, 3],
-        Query(description="期間（1:上半期、2:下半期、3:年間）", example=3),
+        int,
+        Query(ge=1, le=3, description="期間（1:上半期、2:下半期、3:年間）", example=3),
     ],
     gym_id: Annotated[int, Query(ge=1, description="ジムID", example=1)],
     db: DbDep,
