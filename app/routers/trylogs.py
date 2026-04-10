@@ -62,6 +62,56 @@ def register_trylog(
 
 
 @router.post(
+    "/trylog/edit",
+    summary="トライログ編集",
+    status_code=status.HTTP_200_OK,
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "description": "指定されたトライIDのレコードが存在しない場合",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "detail": {
+                                "type": "string",
+                                "example": "指定されたトライID（777）のレコードが存在しません",
+                            }
+                        },
+                        "required": ["detail"],
+                    },
+                    "example": {
+                        "detail": "指定されたトライID（777）のレコードが存在しません",
+                    },
+                }
+            },
+        },
+    },
+)
+def edit_trylog(
+    request: Annotated[schemas.TryLogEditRequest, Body()],
+    db: DbDep,
+) -> None:
+    """
+    指定されたトライIDのトライログ情報を編集する。
+    """
+    try:
+        result = trylogs_crud.edit_trylog(db, request=request)
+        if result is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"指定されたトライID（{request.try_id}）のレコードが存在しません",
+            )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"内部処理エラーが発生しました: {str(e)}",
+        )
+
+
+@router.post(
     "/trylog/delete",
     summary="トライログ削除",
     status_code=status.HTTP_200_OK,

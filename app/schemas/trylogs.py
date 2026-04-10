@@ -101,7 +101,9 @@ class AreaInfo(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     area_name: str = Field(description="エリア名（例: 強傾斜）")
-    top_rate: float | None = Field(None, description="完登率（%）。データがない場合はnull")
+    top_rate: float | None = Field(
+        None, description="完登率（%）。データがない場合はnull"
+    )
     boulder_count: int = Field(0, description="挑戦課題数")
     top_count: int = Field(0, description="完登数")
 
@@ -182,6 +184,21 @@ class BestCountResponse(BaseModel):
     personal_best: BestCountItem | None = Field(
         None, description="パーソナルベスト（対象レコードがない場合はnull）"
     )
+
+
+class TryLogEditRequest(BaseModel):
+    """
+    トライログ編集APIのリクエストボディスキーマ
+    """
+
+    model_config = ConfigDict(from_attributes=True)
+
+    try_id: int = Field(description="トライID", example=341)
+    prob_no: int | None = Field(None, description="課題番号", example=3)
+    result_id: int | None = Field(None, description="リザルトID", example=3)
+    area_id: int | None = Field(None, description="エリアID", example=11)
+    day_count: int | None = Field(None, description="トライ日数", example=1)
+    remarks: str | None = Field(None, description="備考", example="青ホールド")
 
 
 class TryLogRegisterItem(BaseModel):
