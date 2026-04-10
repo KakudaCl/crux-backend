@@ -65,6 +65,28 @@ def register_trylog(
     "/trylog/edit",
     summary="トライログ編集",
     status_code=status.HTTP_200_OK,
+    responses={
+        status.HTTP_404_NOT_FOUND: {
+            "description": "指定されたトライIDのレコードが存在しない場合",
+            "content": {
+                "application/json": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "detail": {
+                                "type": "string",
+                                "example": "指定されたトライID（777）のレコードが存在しません",
+                            }
+                        },
+                        "required": ["detail"],
+                    },
+                    "example": {
+                        "detail": "指定されたトライID（777）のレコードが存在しません",
+                    },
+                }
+            },
+        },
+    },
 )
 def edit_trylog(
     request: Annotated[schemas.TryLogEditRequest, Body()],
