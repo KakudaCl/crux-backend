@@ -34,6 +34,27 @@ def delete_trylog(db: Session, try_id: int) -> None:
     return record
 
 
+def edit_trylog(db: Session, request: schemas.TryLogEditRequest) -> TryRecord | None:
+    """
+    指定されたトライIDのトライ記録を編集する。
+
+    リクエストボディの内容で各カラムを更新し、updated_at を現在時刻で更新する。
+    対象レコードが存在しない場合は None を返す。
+    """
+    record = db.query(TryRecord).filter(TryRecord.try_id == request.try_id).first()
+    if record is None:
+        return None
+
+    record.problem_number = request.prob_no
+    record.result_id = request.result_id
+    record.area_id = request.area_id
+    record.day_count = request.day_count
+    record.remarks = request.remarks
+    record.updated_at = datetime.now()
+    db.commit()
+    return record
+
+
 def get_years(db: Session) -> schemas.YearsResponse:
     """
     トライ記録テーブルからデータが存在する年度を一通り取得する。

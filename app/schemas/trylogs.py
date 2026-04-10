@@ -184,6 +184,21 @@ class BestCountResponse(BaseModel):
     )
 
 
+class TryLogEditRequest(BaseModel):
+    """
+    トライログ編集APIのリクエストボディスキーマ
+    """
+
+    model_config = ConfigDict(from_attributes=True)
+
+    try_id: int = Field(description="トライID", example=341)
+    prob_no: int | None = Field(None, description="課題番号", example=3)
+    result_id: int = Field(description="リザルトID", example=3)
+    area_id: int | None = Field(None, description="エリアID", example=11)
+    day_count: int | None = Field(None, description="トライ日数", example=1)
+    remarks: str | None = Field(None, description="備考", example="青ホールド")
+
+
 class TryLogRegisterItem(BaseModel):
     """
     トライログ登録リクエストの個別項目スキーマ
