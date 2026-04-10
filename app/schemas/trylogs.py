@@ -101,7 +101,9 @@ class AreaInfo(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     area_name: str = Field(description="エリア名（例: 強傾斜）")
-    top_rate: float | None = Field(None, description="完登率（%）。データがない場合はnull")
+    top_rate: float | None = Field(
+        None, description="完登率（%）。データがない場合はnull"
+    )
     boulder_count: int = Field(0, description="挑戦課題数")
     top_count: int = Field(0, description="完登数")
 

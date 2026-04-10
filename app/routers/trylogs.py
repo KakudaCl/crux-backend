@@ -77,7 +77,7 @@ def edit_trylog(
         result = trylogs_crud.edit_trylog(db, request=request)
         if result is None:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
+                status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"指定されたトライID（{request.try_id}）のレコードが存在しません",
             )
     except HTTPException:

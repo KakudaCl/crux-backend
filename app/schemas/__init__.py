@@ -20,6 +20,7 @@ from app.schemas.trylogs import (
     BestCountResponse,
     TryLogRegisterItem,
     TryLogRegisterRequest,
+    TryLogEditRequest,
 )
 from app.schemas.gyms import GymInfo, GymsNameResponse
 from app.schemas.grades import GradeInfo, GradesNameResponse
@@ -48,6 +49,8 @@ __all__ = [
     # trylog register schemas
     "TryLogRegisterItem",
     "TryLogRegisterRequest",
+    # trylog edit schemas
+    "TryLogEditRequest",
     # gyms schemas
     "GymInfo",
     "GymsNameResponse",
