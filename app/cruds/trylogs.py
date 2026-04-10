@@ -45,12 +45,19 @@ def edit_trylog(db: Session, request: schemas.TryLogEditRequest) -> TryRecord | 
     if record is None:
         return None
 
-    record.problem_number = request.prob_no
-    record.result_id = request.result_id
-    record.area_id = request.area_id
-    record.day_count = request.day_count
-    record.remarks = request.remarks
+    if request.prob_no is not None:
+        record.problem_number = request.prob_no
+    if request.result_id is not None:
+        record.result_id = request.result_id
+    if request.area_id is not None:
+        record.area_id = request.area_id
+    if request.day_count is not None:
+        record.day_count = request.day_count
+    if request.remarks is not None:
+        record.remarks = request.remarks
+
     record.updated_at = datetime.now()
+
     db.commit()
     return record
 
