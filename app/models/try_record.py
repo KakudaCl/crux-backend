@@ -3,7 +3,16 @@ Try Record Model
 トライ記録テーブルのモデル定義
 """
 
-from sqlalchemy import Column, BigInteger, Integer, Date, String, ForeignKey, TIMESTAMP
+from sqlalchemy import (
+    Column,
+    BigInteger,
+    Integer,
+    Date,
+    String,
+    ForeignKey,
+    TIMESTAMP,
+    func,
+)
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
@@ -48,7 +57,9 @@ class TryRecord(Base):
     day_count = Column(Integer, nullable=True, default=None, comment="トライ日数")
     remarks = Column(String(30), nullable=True, default=None, comment="備考")
     is_deleted = Column(Integer, nullable=False, default=0, comment="削除フラグ")
-    created_at = Column(TIMESTAMP, nullable=False, comment="作成日時")
+    created_at = Column(
+        TIMESTAMP, nullable=False, server_default=func.now(), comment="作成日時"
+    )
     updated_at = Column(TIMESTAMP, nullable=False, comment="更新日時")
     deleted_at = Column(TIMESTAMP, nullable=True, default=None, comment="削除日時")
 

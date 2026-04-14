@@ -1,6 +1,6 @@
 # ローカル: そのまま docker-compose up で Docker Hub のイメージを使用
 # AWS: 環境変数 POSTGRES_IMAGE, および api の build.args を省略すると ECR 公開イメージを使用
-version: '3.8'
+version: "3.8"
 
 services:
   # PostgreSQL データベース
@@ -20,7 +20,11 @@ services:
       # 初期化スクリプト（初回起動時のみ実行）
       - ./docker/postgres/initdb.d:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-crux_user} -d ${POSTGRES_DB:-crux_db}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-crux_user} -d ${POSTGRES_DB:-crux_db}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -47,6 +51,7 @@ services:
       # API設定
       API_V1_PREFIX: ${API_V1_PREFIX:-/api/v1}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-["http://localhost:3000", "http://localhost:8080"]}
+      TZ: Asia/Tokyo
     ports:
       - "${API_PORT:-8000}:8000"
     volumes:

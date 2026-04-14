@@ -22,26 +22,9 @@ CREATE TABLE IF NOT EXISTS try_record (
     "remarks" VARCHAR(30) DEFAULT NULL,
     "is_deleted" INTEGER DEFAULT 0,
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP DEFAULT NULL,
     "deleted_at" TIMESTAMP DEFAULT NULL
 );
-
-CREATE OR REPLACE FUNCTION set_try_record_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW."updated_at" := DATE_TRUNC('second', CURRENT_TIMESTAMP);
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_set_try_record_updated_at
-BEFORE UPDATE OF
-    result_id,
-    day_count,
-    remarks
-ON try_record
-FOR EACH ROW
-EXECUTE FUNCTION set_try_record_updated_at();
 
 COMMENT ON TABLE try_record IS 'トライ記録';
 COMMENT ON COLUMN try_record."try_id" IS 'トライID';
